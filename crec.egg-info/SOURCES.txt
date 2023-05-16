@@ -1,0 +1,12 @@
+setup.py
+crec/__init__.py
+crec/api.py
+crec/granule.py
+crec/package.py
+crec/parse.py
+crec/xml_parser.py
+crec.egg-info/PKG-INFO
+crec.egg-info/SOURCES.txt
+crec.egg-info/dependency_links.txt
+crec.egg-info/top_level.txt
+test/test.py
