@@ -1,7 +1,7 @@
 from xml.etree import ElementTree as et
 from collections import defaultdict
 import re
-import requests
+import httpx
 
 from crec import GovInfoAPI
 
@@ -29,21 +29,35 @@ class Granule(GovInfoAPI):
 
         self.granule_id = granule_id
         self.date = self.granule_id[5:15]
+        self.mods_url = self.base_url + f'packages/CREC-{self.date}/granules/{self.granule_id}/mods?api_key={self.api_key}'
+        self.htm_url = self.base_url + f'packages/CREC-{self.date}/granules/{self.granule_id}/htm?api_key={self.api_key}'
 
         self.parsed_name_map = {}
         self.raw_text = ''
         self.documents = defaultdict(str)
 
-    def get(self):
-        mods_url = self.base_url + f'packages/CREC-{self.date}/granules/{self.granule_id}/mods?api_key={self.api_key}'
-        mods_content = requests.get(mods_url).content
+    def get(self, client = None):
+        if isinstance(client, httpx.AsyncClient):
+            self.async_get(client=client)
+        else:
+            mods_response = httpx.get(self.mods_url)
+            htm_response = httpx.get(self.htm_url)
+
+            self.parse_responses(mods_response, htm_response)
+
+    async def async_get(self, client: httpx.AsyncClient):
+        mods_response = await client.get(self.mods_url)
+        htm_response = await client.get(self.htm_url)
+
+        self.parse_responses(mods_response, htm_response)
+
+    def parse_responses(self, mods_response, htm_response):
+        mods_content = mods_response.content
         root = et.fromstring(mods_content)
         self.parse_xml(root)
-        
-        htm_url = self.base_url + f'packages/CREC-{self.date}/granules/{self.granule_id}/htm?api_key={self.api_key}'
-        raw_text = requests.get(htm_url).text
-        self.parse_htm(raw_text)
 
+        raw_text = htm_response.text
+        self.parse_htm(raw_text)
 
     def parse_xml(self, root: et):
         extension = root.find('{http://www.loc.gov/mods/v3}extension')
@@ -115,3 +129,10 @@ class Granule(GovInfoAPI):
                 if current_speaker:
                     current_speaker_id = self.parsed_name_map[current_speaker]
                     self.documents[current_speaker_id] += clipped_paragraph_text
+
+
+# SPENCER: blah blah blah
+# ETHAN: sfoiansdof
+# SPENCER: sadfoindso
+
+# -> SPENCER: [blah blah blah sadfoindso], E

@@ -7,6 +7,9 @@ import io
 import os
 from xml.etree import ElementTree as et
 import math
+import time
+import httpx
+import asyncio
 
 from crec import GovInfoAPI
 from crec.granule import Granule
@@ -23,6 +26,8 @@ def validate_date(date, param_name):
         date = date.strftime('%Y-%m-%d')
     else:
         raise TypeError(f'{param_name} must be a string in YYYY-mm-dd format or a datetime.datetime object')
+    
+    return date
 
 def generate_date_range(start: str, end: str):
     start_obj = datetime.datetime.strptime(start, '%Y-%m-%d')
@@ -41,7 +46,7 @@ class Package(GovInfoAPI):
     def __init__(self, date: typing.Union[str, datetime.datetime], api_key=None) -> None:
         super().__init__(api_key)
 
-        validate_date(date, 'date')
+        date = validate_date(date, 'date')
 
         self.date = date
 
@@ -80,7 +85,7 @@ class Package(GovInfoAPI):
             g.parse_htm(raw_text)
             self.granules[g_id] = g
 
-    def _get_individual(self):
+    async def _get_individual(self):
         granules_json = requests.get(self.granules_url).json()
         
         granules_count = granules_json['count']
@@ -93,22 +98,28 @@ class Package(GovInfoAPI):
                 next_granules_json = requests.get(self.granules_url.replace('offset=0', f'offset={offset}')).json()
                 granule_ids.append([g['granuleId'] for g in next_granules_json['granules']])
 
-        for g_id in granule_ids:
-            g = Granule(g_id)
-            g.get()
-            self.granules[g_id] = g
+        async with httpx.AsyncClient() as client:
+            tasks = []
+            for g_id in granule_ids:
+                print(g_id)
+                g = Granule(g_id)
+                self.granules[g_id] = g
+                tasks.append(asyncio.create_task(g.async_get(client)))
+                # g.get(client=client)
+
+            await asyncio.gather(*tasks)
 
     def get(self, method: str = 'zip'):
         if method == 'zip':
             self._get_zip()
         elif method == 'individual':
-            self._get_individual()
+            asyncio.run(self._get_individual())
         else:
             # raise some error
             ...
 
 
-class PackageCollection(GovInfoAPI):
+class DocumentCollection(GovInfoAPI):
     def __init__(self, start_date: str = None, end_date: str = None, dates: list = None, api_key=None) -> None:
         super().__init__(api_key)
 
@@ -122,6 +133,7 @@ class PackageCollection(GovInfoAPI):
             dates = generate_date_range(start_date, end_date)
         else:
             for date in dates:
+                # TODO: does not work
                 validate_date(date, 'each date within dates')
 
         self.packages = {}
