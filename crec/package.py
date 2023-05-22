@@ -109,7 +109,7 @@ class Package(GovInfoAPI):
 
             await asyncio.gather(*tasks)
 
-    def get(self, method: str = 'zip'):
+    def get(self, method: str = 'individual'):
         if method == 'zip':
             self._get_zip()
         elif method == 'individual':
