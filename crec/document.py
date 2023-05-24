@@ -73,6 +73,9 @@ class DocumentCollection:
     def __repr__(self) -> str:
         return ''.join([str(d) for d_id, d in self.documents.items()])
 
+    def merge(self, other: 'DocumentCollection'):
+        self.documents.update(other.documents)
+
     def add_paragraph(self, p: Paragraph, key_prefix: str = ''):
         if self.group_by == 'speaker':
             key = f'{key_prefix}{p.speaker_id}'

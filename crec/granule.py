@@ -22,7 +22,7 @@ class Granule(GovInfoAPI):
         self.parsed_name_map = {}
         self.raw_text = ''
         self.paragraphs = []
-        self.documents = DocumentCollection(group_by=group_by)
+        self.document_collection = DocumentCollection(group_by=group_by)
 
     def get(self, client = None):
         if isinstance(client, httpx.AsyncClient):

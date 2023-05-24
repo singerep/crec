@@ -1,7 +1,7 @@
 import requests # TODO: switch to httpx
 import json
 import datetime
-import typing
+from typing import Union, List, Dict
 import zipfile
 import io
 import os
@@ -13,48 +13,50 @@ import asyncio
 
 from crec import GovInfoAPI
 from crec.granule import Granule
+from crec.document import DocumentCollection
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 def validate_date(date, param_name):
     if isinstance(date, str):
         try:
-            datetime.datetime.strptime(date, '%Y-%m-%d')
+            date = datetime.datetime.strptime(date, '%Y-%m-%d')
         except ValueError:
-            raise ValueError('date string must in YYYY-mm-dd format')
+            raise ValueError(f'{param_name} string must in YYYY-mm-dd format')
     elif isinstance(date, datetime.datetime):
-        date = date.strftime('%Y-%m-%d')
+        pass
     else:
         raise TypeError(f'{param_name} must be a string in YYYY-mm-dd format or a datetime.datetime object')
+
+    # TODO: make sure the date is in some range
     
     return date
 
-def generate_date_range(start: str, end: str):
-    start_obj = datetime.datetime.strptime(start, '%Y-%m-%d')
-    end_obj = datetime.datetime.strptime(end, '%Y-%m-%d')
+def generate_date_range(start_date: datetime.datetime, end_date: datetime.datetime):
     dates = []
-    delta = end_obj - start_obj
+    delta = end_date - start_date
 
     for i in range(delta.days + 1):
-        day = start_obj + datetime.timedelta(days=i)
+        day = start_date + datetime.timedelta(days=i)
         if day.weekday() not in [5, 6]:
             dates += [datetime.datetime.strftime(day, '%Y-%m-%d')]
 
     return dates
 
 class Package(GovInfoAPI):
-    def __init__(self, date: typing.Union[str, datetime.datetime], api_key=None) -> None:
+    def __init__(self, date: Union[str, datetime.datetime], group_by: str = 'speaker', api_key=None) -> None:
         super().__init__(api_key)
 
         date = validate_date(date, 'date')
 
         self.date = date
+        self.group_by = group_by
 
         self.summary_url = self.base_url + f'packages/CREC-{date}/summary?api_key={self.api_key}'
         self.granules_url = self.base_url + f'packages/CREC-{date}/granules?offset=0&pageSize=100&api_key={self.api_key}'
         self.zip_url = self.base_url + f'packages/CREC-{date}/zip?api_key={self.api_key}'
 
-        self.granules = {}
+        self.granules : Dict[str, Granule] = {}
 
     @staticmethod
     def get_granule_roots(root: et):
@@ -76,7 +78,7 @@ class Package(GovInfoAPI):
         
         granule_roots = self.get_granule_roots(tree)
         for g_id, g_root in granule_roots.items():
-            g = Granule(g_id)
+            g = Granule(granule_id=g_id, group_by=self.group_by)
             g.parse_xml(g_root)
 
             htm_f_name = dir_path + f'/data/CREC-2018-01-04/html/{g_id}.htm'
@@ -101,8 +103,7 @@ class Package(GovInfoAPI):
         async with httpx.AsyncClient() as client:
             tasks = []
             for g_id in granule_ids:
-                print(g_id)
-                g = Granule(g_id)
+                g = Granule(granule_id=g_id, group_by=self.group_by)
                 self.granules[g_id] = g
                 tasks.append(asyncio.create_task(g.async_get(client)))
                 # g.get(client=client)
@@ -115,41 +116,30 @@ class Package(GovInfoAPI):
         elif method == 'individual':
             asyncio.run(self._get_individual())
         else:
-            # raise some error
-            ...
+            raise NotImplementedError()
 
 
-class DocumentCollection(GovInfoAPI):
-    def __init__(self, start_date: str = None, end_date: str = None, dates: list = None, api_key=None) -> None:
+class Record(GovInfoAPI):
+    def __init__(self, group_by: str = 'speaker', api_key=None) -> None:
         super().__init__(api_key)
+        self.group_by = group_by
+        self.document_collection = DocumentCollection(group_by=group_by)
 
-        if (start_date is not None and end_date is not None and dates is None) or (start_date is None and end_date is None and dates is not None):
-            pass
-        else:
-            # raise some error
-            ...
+    def get_dates(self, start_date: Union[str, datetime.datetime] = None, end_date: Union[str, datetime.datetime] = None, dates: List[Union[str, datetime.datetime]] = None):
+        if start_date is not None and end_date is not None and dates is None:
+            start_date = validate_date(date=start_date, param_name='start date')
+            end_date = validate_date(date=end_date, param_name='end date')
+            dates = generate_date_range(start=start_date, end=end_date)
+        elif start_date is None and end_date is None and dates is not None:
+            dates = [validate_date(date=d, param_name='each date in dates') for d in dates]
 
-        if start_date is not None:
-            dates = generate_date_range(start_date, end_date)
-        else:
-            for date in dates:
-                # TODO: does not work
-                validate_date(date, 'each date within dates')
-
-        self.packages = {}
-        for date in dates:
-            p = Package(date)
-            self.packages[date] = p
-
-    def get(self, method: str = 'zip'):
-        for date, package in self.packages.items():
-            package.get(method=method)
-
-    @property
-    def documents(self):
-        docs = {}
-        for date, p in self.packages.items():
+        for d in dates:
+            p = Package(date=d)
+            p.get()
             for g_id, g in p.granules.items():
-                for speaker, text in g.documents.items():
-                    docs[f'{g_id}-{speaker}'] = text
-        return docs
+                self.document_collection.merge(g.document_collection)
+
+    def get_granules(self, granule_ids: List[str] = []):
+        for g_id in granule_ids:
+            g = Granule(granule_id=g_id, group_by=self.group_by)
+            self.document_collection.merge(g.document_collection)
