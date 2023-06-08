@@ -3,18 +3,16 @@ import time
 from typing import Union
 import asyncio
 from collections import defaultdict
+from enum import Enum
 
 
-class GovInfoAPIError(BaseException):
+class RateLimitError(BaseException):
     pass
 
 
-class OverRateLimit(BaseException):
-    pass
-
-
-class OverRetryLimit(BaseException):
-    pass
+class ResponseMeta:
+    def __init__(self) -> None:
+        pass
 
 
 class GovInfoAPI(httpx.AsyncClient):
@@ -24,8 +22,7 @@ class GovInfoAPI(httpx.AsyncClient):
         self.api_key = 'VjAEDf7KZQF5WfSHJjuwz7HaEcbAkFdpQovrtf8S'
         self.root_url = 'https://api.govinfo.gov/' # this is unnecessary - should use logic from client for relative urls, params
         self.wait = wait
-
-        self.retry_limit = retry_limit
+        self.retry_limit = retry_limit       
 
     @staticmethod
     def validate_response(response: httpx.Response):
@@ -33,6 +30,7 @@ class GovInfoAPI(httpx.AsyncClient):
     
     async def get(self, url):
         request_counter = 0
+        response_validity = False
         while self.retry_limit is False or request_counter < self.retry_limit:
             response = await super().get(url=url)
             request_counter += 1
@@ -41,10 +39,11 @@ class GovInfoAPI(httpx.AsyncClient):
                 if self.wait is True:
                     asyncio.sleep(self.wait)
                 else:
-                    raise OverRateLimit
+                    raise RateLimitError
             if self.validate_response(response=response):
+                response_validity = True
                 break
             
         # return response and some response metadata (could be dataclass)
 
-        return response
+        return response_validity, response

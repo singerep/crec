@@ -2,30 +2,31 @@ from xml.etree import ElementTree as et
 from collections import defaultdict
 import re
 import httpx
+import asyncio
 
-from crec import GovInfoAPI
+from crec import GovInfoAPI, OverRateLimit, OverRetryLimit, GovInfoAPIError
 from crec.document import Paragraph, Document, DocumentCollection
 
 # TODO: add ability to split text by speaker so that each speaker has 
 # at most 1 document, or so that each speaker has 1 document per individual 
 # time they speak
 
-class Granule(GovInfoAPI):
-    def __init__(self, granule_id, group_by: str = 'speaker', api_key=None) -> None:
-        super().__init__(api_key)
-
+class Granule:
+    def __init__(self, granule_id: str, client: GovInfoAPI, group_by: str = 'speaker', api_key=None) -> None:
         self.granule_id = granule_id
         self.date = self.granule_id[5:15]
-        self.mods_url = self.base_url + f'packages/CREC-{self.date}/granules/{self.granule_id}/mods?api_key={self.api_key}'
-        self.htm_url = self.base_url + f'packages/CREC-{self.date}/granules/{self.granule_id}/htm?api_key={self.api_key}'
+        self.mods_url = client.root_url + f'packages/CREC-{self.date}/granules/{self.granule_id}/mods?api_key={client.api_key}'
+        self.htm_url = client.root_url + f'packages/CREC-{self.date}/granules/{self.granule_id}/htm?api_key={client.api_key}'
 
         self.parsed_name_map = {}
         self.raw_text = ''
         self.paragraphs = []
         self.document_collection = DocumentCollection(group_by=group_by)
 
+        self.valid = False
+
     def get(self, client = None):
-        if isinstance(client, httpx.AsyncClient):
+        if isinstance(client, GovInfoAPI):
             self.async_get(client=client)
         else:
             mods_response = httpx.get(self.mods_url)
@@ -33,11 +34,15 @@ class Granule(GovInfoAPI):
 
             self.parse_responses(mods_response, htm_response)
 
-    async def async_get(self, client: httpx.AsyncClient):
-        mods_response = await client.get(self.mods_url)
-        htm_response = await client.get(self.htm_url)
+    async def async_get(self, client: GovInfoAPI):
+        mods_response_validity, mods_response = await client.get(self.mods_url)
+        htm_response_validity, htm_response = await client.get(self.htm_url)
 
-        self.parse_responses(mods_response, htm_response)
+        if mods_response_validity and htm_response_validity:
+            self.parse_responses(mods_response, htm_response)
+        else:
+            # got invalid responses for one reason or another
+            pass
 
     def parse_responses(self, mods_response, htm_response):
         mods_content = mods_response.content
@@ -47,9 +52,11 @@ class Granule(GovInfoAPI):
         raw_text = htm_response.text
         self.parse_htm(raw_text)
 
+        self.valid = True
+
     def parse_xml(self, root: et):
         for member in root.iter('{http://www.loc.gov/mods/v3}congMember'):
-            bioguide_id = member.attrib['bioGuideId']
+            bioguide_id = member.attrib.get('bioGuideId', None)
             names = member.findall('{http://www.loc.gov/mods/v3}name')
             parsed_name = [n for n in names if n.attrib['type'] == 'parsed'][0].text
             self.parsed_name_map[parsed_name] = bioguide_id
@@ -92,7 +99,7 @@ class Granule(GovInfoAPI):
             current_speaker = p.speaker
 
             if p.valid:
-                self.documents.add_paragraph(p=p, key_prefix=f'{self.granule_id}_')
+                self.document_collection.add_paragraph(p=p, key_prefix=f'{self.granule_id}_')
 
 # SPENCER: blah blah blah
 # ETHAN: sfoiansdof

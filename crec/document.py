@@ -18,7 +18,6 @@ class Paragraph:
     def __init__(self, previous_speaker: str, parsed_name_map: dict, text: str) -> None:
         self.speaker = None
         self.speaker_id = None
-        self.text = text
         self.valid = True
 
         potential_first_sentence_split = re.split('(?<!Mr|Ms|Dr)\. ', text, maxsplit=1)
@@ -34,8 +33,10 @@ class Paragraph:
                 if text[:len(parsed_name)] == parsed_name:
                     self.speaker = parsed_name
                     self.speaker_id = parsed_name_map[parsed_name]
-                    self.text = text[len(parsed_name) + 2:]
+                    text = text[len(parsed_name) + 2:]
                     break
+
+        self.text = ' '.join(text.split())
 
         if self.speaker is None:
             self.speaker = previous_speaker
@@ -45,7 +46,7 @@ class Paragraph:
         if len(text) == 0 or text[0] == ' ' or text[0] == '(':
             self.valid = False
 
-
+# TODO: this needs to store more information, like granule stuff
 class Document:
     def __init__(self, key: str, speaker: str, speaker_id: str, text: str) -> None:
         self.key = key
@@ -54,15 +55,10 @@ class Document:
         self.text = text
 
     def __repr__(self) -> str:
-        return \
-        f'''
-        \n--- {self.speaker} ---
-        {self.text}\n
-        '''
+        return f'''--- {self.speaker} ({self.speaker_id}) ---\n{self.text}\n\n'''
     
     def add_paragraph(self, p: Paragraph):
-        self.text += p.text.replace('\n', '')
-
+        self.text += f' {p.text}'
 
 
 class DocumentCollection:
@@ -90,3 +86,8 @@ class DocumentCollection:
 
     def write(self, method: str = '*'):
         raise NotImplementedError()
+
+
+# SPENCER: blah blah
+# BERK: bloo bloo
+# SPENCER: blah blah
