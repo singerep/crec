@@ -2,28 +2,30 @@ from xml.etree import ElementTree as et
 from collections import defaultdict
 import re
 import httpx
+from typing import List
 import asyncio
 
-from crec import GovInfoAPI, OverRateLimit, OverRetryLimit, GovInfoAPIError
-from crec.document import Paragraph, Document, DocumentCollection
+from crec import GovInfoAPI
+from crec.paragraph import Paragraph, ParagraphCollection
+from crec.speaker import Speaker, UNKNOWN_SPEAKER
+from crec.constants import TITLES
 
-# TODO: add ability to split text by speaker so that each speaker has 
-# at most 1 document, or so that each speaker has 1 document per individual 
-# time they speak
 
 class Granule:
-    def __init__(self, granule_id: str, client: GovInfoAPI, group_by: str = 'speaker', api_key=None) -> None:
+    def __init__(self, granule_id: str) -> None:
         self.granule_id = granule_id
         self.date = self.granule_id[5:15]
-        self.mods_url = client.root_url + f'packages/CREC-{self.date}/granules/{self.granule_id}/mods?api_key={client.api_key}'
-        self.htm_url = client.root_url + f'packages/CREC-{self.date}/granules/{self.granule_id}/htm?api_key={client.api_key}'
+        self.mods_url = f'packages/CREC-{self.date}/granules/{self.granule_id}/mods'
+        self.htm_url = f'packages/CREC-{self.date}/granules/{self.granule_id}/htm'
 
-        self.parsed_name_map = {}
         self.raw_text = ''
-        self.paragraphs = []
-        self.document_collection = DocumentCollection(group_by=group_by)
+        self.clean_text = ''
+        self.paragraphs_collection = ParagraphCollection(granule_id=granule_id)
 
         self.valid = False
+
+    def __repr__(self) -> str:
+        return f'{self.granule_id}'
 
     def get(self, client = None):
         if isinstance(client, GovInfoAPI):
@@ -41,10 +43,9 @@ class Granule:
         if mods_response_validity and htm_response_validity:
             self.parse_responses(mods_response, htm_response)
         else:
-            # got invalid responses for one reason or another
             pass
 
-    def parse_responses(self, mods_response, htm_response):
+    def parse_responses(self, mods_response: httpx.Response, htm_response: httpx.Response):
         mods_content = mods_response.content
         root = et.fromstring(mods_content)
         self.parse_xml(root)
@@ -56,58 +57,68 @@ class Granule:
 
     def parse_xml(self, root: et):
         for member in root.iter('{http://www.loc.gov/mods/v3}congMember'):
-            bioguide_id = member.attrib.get('bioGuideId', None)
-            names = member.findall('{http://www.loc.gov/mods/v3}name')
-            parsed_name = [n for n in names if n.attrib['type'] == 'parsed'][0].text
-            self.parsed_name_map[parsed_name] = bioguide_id
+            s = Speaker.from_member(member=member)
+            self.paragraphs_collection.speakers.append(s)
 
     def parse_htm(self, raw_text):
         self.raw_text = raw_text
         text = raw_text
 
-        # remove heading
-        heading_match = re.search('www\.gpo\.gov<\/a>\](\n)+', text)
-        if heading_match is not None:
-            text = text[heading_match.end():]
+        # remove bullets
+        text = re.sub('<bullet>', ' ', text)
+
+        # remove title block
+        title_block_match = re.search('\n\s+\b[A-Z][a-zA-Z]+\b(?:.*?\r?\n)+(?=\r?\n)', text)
+        if title_block_match is not None:
+            text = text[title_block_match.end():]
 
         # remove footer
         footer_match = re.search('(\n| )+____________________\n+', text)
         if footer_match is not None:
             text = text[:footer_match.start()]
 
+        # remove bottom html
+        bottom_html_match = re.search('\n+<\/pre><\/body>\n<\/html>', text)
+        if bottom_html_match is not None:
+            text = text[:bottom_html_match.start() + 1]
+
         # remove page numbers
-        text = re.sub('\s+\[\[Page .+\]\]\s+', '\n  ', text)
+        text = re.sub('\s+\[\[Page .+\](\s+|)', ' ', text)
 
         # remove times
-        text = re.sub('\s+\{time\}\s+\d+\s+', '\n  ', text)
+        text = re.sub('\s+\{time\}\s+\d+(\s+|)', ' ', text)
 
         # remove notes
         # text = re.sub('=+ NOTE =+(?s).+=+ END NOTE =+', '\n', text)
 
-        if len(self.parsed_name_map) == 1:
-            current_speaker = list(self.parsed_name_map.keys())[0]
-        else:
-            current_speaker = None
+        self.clean_text = text
 
-        paragraph_matches = list(re.finditer('\n  ', text))
+        self.find_titled_speakers()
+        self.find_paragraphs()
+
+    def find_titled_speakers(self):
+        titled_speakers = set()
+        for t in TITLES:
+            for match in re.findall(t, self.clean_text):
+                if match not in titled_speakers:
+                    titled_speakers.add(match)
+                    s = Speaker.from_title(title=match)
+                    self.paragraphs_collection.speakers.append(s)
+
+        self.paragraphs_collection.speakers = sorted(self.paragraphs_collection.speakers, key=lambda s : len(s.parsed_name), reverse=True)
+
+    def find_paragraphs(self):
+        if len(self.paragraphs_collection.speakers) == 1:
+            current_speaker = self.paragraphs_collection.speakers[0]
+        else:
+            current_speaker = UNKNOWN_SPEAKER
+
+        paragraph_matches = list(re.finditer('\n  ', self.clean_text))
         for paragraph_id, paragraph_match in enumerate(paragraph_matches):
             paragraph_start = paragraph_match.end()
             paragraph_end = paragraph_matches[paragraph_id + 1].start() if paragraph_id < len(paragraph_matches) - 1 else -1
-            paragraph_text = text[paragraph_start:paragraph_end]
+            paragraph_text = self.clean_text[paragraph_start:paragraph_end]
 
-            p = Paragraph(current_speaker, self.parsed_name_map, paragraph_text)
+            p = Paragraph(granule_id=self.granule_id, previous_speaker=current_speaker, speakers=self.paragraphs_collection.speakers, text=paragraph_text)
             current_speaker = p.speaker
-
-            if p.valid:
-                self.document_collection.add_paragraph(p=p, key_prefix=f'{self.granule_id}_')
-
-# SPENCER: blah blah blah
-# ETHAN: sfoiansdof
-# SPENCER: sadfoindso
-
-# -> SPENCER: [blah blah blah sadfoindso], E
-
-# group_by: speaker
-#   each speaker in a granule has at most 1 document
-# group_by: ______
-#   each speaker in a granule has 1 document per each time they begin speaker
+            self.paragraphs_collection.paragraphs.append(p)
