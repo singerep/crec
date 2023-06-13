@@ -1,14 +1,17 @@
 from xml.etree import ElementTree as et
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 import re
 import httpx
-from typing import List
+from typing import List, Dict
 import asyncio
+from itertools import chain
 
 from crec import GovInfoAPI
-from crec.paragraph import Paragraph, ParagraphCollection
+from crec.paragraph import Paragraph
+from crec.passage import Passage
 from crec.speaker import Speaker, UNKNOWN_SPEAKER
 from crec.constants import TITLES
+from crec.text_collection import TextCollection
 
 
 class Granule:
@@ -20,7 +23,10 @@ class Granule:
 
         self.raw_text = ''
         self.clean_text = ''
-        self.paragraphs_collection = ParagraphCollection(granule_id=granule_id)
+        self.speakers : Dict[int, Speaker] = {}
+
+        self.passages = TextCollection()
+        self.paragraphs = TextCollection()
 
         self.valid = False
 
@@ -58,22 +64,23 @@ class Granule:
     def parse_xml(self, root: et):
         for member in root.iter('{http://www.loc.gov/mods/v3}congMember'):
             s = Speaker.from_member(member=member)
-            self.paragraphs_collection.speakers.append(s)
+            self.speakers[f's{len(self.speakers)}'] = s
 
     def parse_htm(self, raw_text):
         self.raw_text = raw_text
         text = raw_text
 
         # remove bullets
-        text = re.sub('<bullet>', ' ', text)
+        text = re.sub(r'<bullet>', ' ', text)
 
         # remove title block
-        title_block_match = re.search('\n\s+\b[A-Z][a-zA-Z]+\b(?:.*?\r?\n)+(?=\r?\n)', text)
+        # \n\s+[a-zA-Z1-9\.\-, ]+(?:(?:\r*){2})
+        title_block_match = re.search(r'(?<!\n|])\n(?=\n)', text)
         if title_block_match is not None:
             text = text[title_block_match.end():]
 
         # remove footer
-        footer_match = re.search('(\n| )+____________________\n+', text)
+        footer_match = re.search(r'(\n| )+____________________\n+', text)
         if footer_match is not None:
             text = text[:footer_match.start()]
 
@@ -94,7 +101,7 @@ class Granule:
         self.clean_text = text
 
         self.find_titled_speakers()
-        self.find_paragraphs()
+        self.find_passages()
 
     def find_titled_speakers(self):
         titled_speakers = set()
@@ -103,22 +110,35 @@ class Granule:
                 if match not in titled_speakers:
                     titled_speakers.add(match)
                     s = Speaker.from_title(title=match)
-                    self.paragraphs_collection.speakers.append(s)
+                    self.speakers[f's{len(self.speakers)}'] = s
 
-        self.paragraphs_collection.speakers = sorted(self.paragraphs_collection.speakers, key=lambda s : len(s.parsed_name), reverse=True)
+    def find_passages(self):
+        if len(self.speakers) == 0:
+            s = UNKNOWN_SPEAKER
+            passage = Passage(granule_id=self.granule_id, speaker=s, text=self.clean_text)
+            self.passages.add(passage)
+            self.paragraphs.merge(passage.paragraphs)
+            return
 
-    def find_paragraphs(self):
-        if len(self.paragraphs_collection.speakers) == 1:
-            current_speaker = self.paragraphs_collection.speakers[0]
-        else:
-            current_speaker = UNKNOWN_SPEAKER
+        speaker_search_str = '(' + '|'.join([f'(?P<{s_id}>\n  {s.parsed_name}\. )' for s_id, s in sorted(self.speakers.items(), key=lambda p : len(p[1].parsed_name), reverse=True)]) + ')'
+        print(speaker_search_str)
+        speaker_matches = list(re.finditer(speaker_search_str, self.clean_text))
 
-        paragraph_matches = list(re.finditer('\n  ', self.clean_text))
-        for paragraph_id, paragraph_match in enumerate(paragraph_matches):
-            paragraph_start = paragraph_match.end()
-            paragraph_end = paragraph_matches[paragraph_id + 1].start() if paragraph_id < len(paragraph_matches) - 1 else -1
-            paragraph_text = self.clean_text[paragraph_start:paragraph_end]
+        if len(speaker_matches) == 0 or speaker_matches[0].start() > 3:
+            if len(self.speakers) == 1:
+                s = list(self.speakers.values())[0]
+            else:
+                s = UNKNOWN_SPEAKER
+            end = None if len(speaker_matches) == 0 else speaker_matches[0].start()
+            passage = Passage(granule_id=self.granule_id, speaker=s, text=self.clean_text[0:end])
+            self.passages.add(passage)
+            self.paragraphs.merge(passage.paragraphs)
 
-            p = Paragraph(granule_id=self.granule_id, previous_speaker=current_speaker, speakers=self.paragraphs_collection.speakers, text=paragraph_text)
-            current_speaker = p.speaker
-            self.paragraphs_collection.paragraphs.append(p)
+        for i, match in enumerate(speaker_matches):
+            s_id = [k for k, v in match.groupdict().items() if v != None][0]
+            speaker = self.speakers[s_id]
+            start = match.end()
+            end = speaker_matches[i + 1].start() if i < len(speaker_matches) - 1 else None
+            passage = Passage(granule_id=self.granule_id, speaker=speaker, text=self.clean_text[start:end])
+            self.passages.add(passage)
+            self.paragraphs.merge(passage.paragraphs)

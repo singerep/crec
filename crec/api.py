@@ -32,7 +32,7 @@ class GovInfoAPI(httpx.AsyncClient):
             request_counter += 1
             try:
                 response = await super().get(url=url, params=params)
-            except (httpx.ConnectTimeout, httpx.ReadTimeout):
+            except (httpx.ConnectTimeout, httpx.ReadTimeout, httpx.PoolTimeout):
                 response = None
 
             if response is None:
