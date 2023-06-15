@@ -39,6 +39,7 @@ class GovInfoClient(httpx.AsyncClient):
                 response = None
 
             if response is None:
+                self.logger.log(message=f'httpx error')
                 await asyncio.sleep(2)
                 continue
 
@@ -50,6 +51,7 @@ class GovInfoClient(httpx.AsyncClient):
                     raise RateLimitError
 
             if response.status_code != 200:
+                self.logger.log(message=f'api error')
                 await asyncio.sleep(2)
                 continue
 

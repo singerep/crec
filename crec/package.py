@@ -50,9 +50,9 @@ class Package:
         self.client = client
         self.logger = logger
 
-        self.summary_url = f'packages/CREC-{date}/summary?api_key={client.api_key}'
-        self.granules_url = f'packages/CREC-{date}/granules?offset=0&pageSize=100&api_key={client.api_key}'
-        self.zip_url = f'packages/CREC-{date}/zip?api_key={client.api_key}'
+        self.summary_url = f'packages/CREC-{date}/summary'
+        self.granules_url = f'packages/CREC-{date}/granules'
+        self.zip_url = f'packages/CREC-{date}/zip'
 
         self.granule_ids = []
         self.granules : Dict[str, Granule] = {}
@@ -86,7 +86,7 @@ class Package:
             g.parse_htm(raw_text)
             self.granules[g_id] = g
 
-    async def get_granule_ids(self, client: GovInfoClient):
+    async def get_granule_ids(self, client: GovInfoClient, granule_class_filters: List[str]):
         self.logger.log(f'getting granule ids from {self.date}')
         got_all_ids = False
 
@@ -99,7 +99,7 @@ class Package:
         granules_json = granules_resp.json()
         
         granules_count = granules_json['count']
-        granule_ids = [g['granuleId'] for g in granules_json['granules']]
+        granule_ids = [g['granuleId'] for g in granules_json['granules'] if granule_class_filters is None or g['granuleClass'] in granule_class_filters]
 
         if granules_count > 100:
             got_all_ids = False
@@ -112,7 +112,7 @@ class Package:
                 else:
                     break
                 next_granules_json = next_granules_resp.json()
-                granule_ids += [g['granuleId'] for g in next_granules_json['granules']]
+                granule_ids += [g['granuleId'] for g in next_granules_json['granules'] if granule_class_filters is None or g['granuleClass'] in granule_class_filters]
             got_all_ids = True
         
         return got_all_ids, granule_ids

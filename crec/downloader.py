@@ -15,7 +15,10 @@ from crec.logger import Logger
 
 
 class Downloader:
-    def __init__(self, batch_size: int, wait: Union[bool, int], retry_limit: Union[bool, int], api_key: str, logger: Logger) -> None:
+    def __init__(self, granule_class_filter: List[str], parse: bool, write: Union[bool, str], batch_size: int, wait: Union[bool, int], retry_limit: Union[bool, int], api_key: str, logger: Logger) -> None:
+        self.granule_class_filters = granule_class_filter
+        self.parse = parse
+        self.write = write
         self.batch_size = batch_size
         self.client = GovInfoClient(wait=wait, retry_limit=retry_limit, logger=logger)
         self.logger = logger
@@ -58,7 +61,7 @@ class Downloader:
         granule_ids = []
         for d in dates:
             p = Package(date=d, client=client, logger=self.logger)
-            got_all_ids, p_granule_ids = await p.get_granule_ids(client=client)
+            got_all_ids, p_granule_ids = await p.get_granule_ids(client=client, granule_class_filters=self.granule_class_filters)
             if got_all_ids:
                 granule_ids += p_granule_ids
             else:

@@ -42,6 +42,9 @@ class Record:
         end_date: Union[str, datetime.datetime] = None, 
         dates: List[Union[str, datetime.datetime]] = None, 
         granule_ids: List[str] = None,
+        granule_class_filter: List[str] = None,
+        parse: bool = True,
+        write: Union[bool, str] = False,
         batch_size: int = 200,
         wait: Union[int, bool] = 300,
         retry_limit: Union[bool, int] = 5,
@@ -50,7 +53,7 @@ class Record:
         logger_outpath: str = None
     ) -> None:
         self.logger = Logger(verbose=verbose, logger_outpath=logger_outpath)
-        self.downloader = Downloader(batch_size=batch_size, wait=wait, retry_limit=retry_limit, api_key=api_key, logger=self.logger)
+        self.downloader = Downloader(granule_class_filter=granule_class_filter, parse=parse, batch_size=batch_size, wait=wait, retry_limit=retry_limit, api_key=api_key, logger=self.logger)
 
         if start_date is not None or end_date is not None or dates is not None:
             if start_date is not None and end_date is not None and dates is None:

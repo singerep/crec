@@ -1,8 +1,9 @@
 from xml.etree import ElementTree as et
+from xml.etree.ElementTree import Element
 from collections import defaultdict, namedtuple
 import re
 import httpx
-from typing import List, Dict
+from typing import List, Dict, Union
 import asyncio
 from itertools import chain
 
@@ -15,6 +16,8 @@ from crec.text import Passage, TextCollection
 class Granule:
     def __init__(self, granule_id: str) -> None:
         self.granule_id = granule_id
+        self.granule_class = None
+        self.sub_granule_class = None
         self.date = self.granule_id[5:15]
         self.mods_url = f'packages/CREC-{self.date}/granules/{self.granule_id}/mods'
         self.htm_url = f'packages/CREC-{self.date}/granules/{self.granule_id}/htm'
@@ -40,14 +43,18 @@ class Granule:
 
             self.parse_responses(mods_response, htm_response)
 
-    async def async_get(self, client: GovInfoClient):
+    async def async_get(self, client: GovInfoClient, parse: bool, write: Union[bool, str]):
         mods_response_validity, mods_response = await client.get(self.mods_url)
         htm_response_validity, htm_response = await client.get(self.htm_url)
 
-        if mods_response_validity and htm_response_validity:
-            self.parse_responses(mods_response, htm_response)
+        if parse:
+            if mods_response_validity and htm_response_validity:
+                self.parse_responses(mods_response, htm_response)
         else:
-            pass
+            self.valid = True
+
+        if write:
+            raise NotImplementedError
 
     def parse_responses(self, mods_response: httpx.Response, htm_response: httpx.Response):
         mods_content = mods_response.content
@@ -59,7 +66,12 @@ class Granule:
 
         self.valid = True
 
-    def parse_xml(self, root: et):
+    def parse_xml(self, root: Element):
+        for gc in root.iter('{http://www.loc.gov/mods/v3}granuleClass'):
+            self.granule_class = gc.text
+        for sgc in root.iter('{http://www.loc.gov/mods/v3}subGranuleClass'):
+            self.sub_granule_class = sgc.text
+        
         for member in root.iter('{http://www.loc.gov/mods/v3}congMember'):
             s = Speaker.from_member(member=member)
             self.speakers[f's{len(self.speakers)}'] = s
