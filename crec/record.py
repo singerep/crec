@@ -53,7 +53,7 @@ class Record:
         logger_outpath: str = None
     ) -> None:
         self.logger = Logger(verbose=verbose, logger_outpath=logger_outpath)
-        self.downloader = Downloader(granule_class_filter=granule_class_filter, parse=parse, batch_size=batch_size, wait=wait, retry_limit=retry_limit, api_key=api_key, logger=self.logger)
+        self.downloader = Downloader(granule_class_filter=granule_class_filter, parse=parse, write=write, batch_size=batch_size, wait=wait, retry_limit=retry_limit, api_key=api_key, logger=self.logger)
 
         if start_date is not None or end_date is not None or dates is not None:
             if start_date is not None and end_date is not None and dates is None:
@@ -75,12 +75,10 @@ class Record:
         else:
             raise ValueError("Must specify a start date and an end date or a list of dates or a list of granule ids")
 
-        self.paragraphs = TextCollection()
-        self.passages = TextCollection()
+        self.text_collection = TextCollection()
 
         for g in self.granules:
-            self.paragraphs.merge(g.paragraphs)
-            self.passages.merge(g.passages)
+            self.text_collection.merge(g.text_collection)
 
     @property
     def raw_text(self) -> List[str]:

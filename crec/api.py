@@ -1,9 +1,6 @@
 import httpx
-import time
 from typing import Union
 import asyncio
-from collections import defaultdict
-from enum import Enum
 
 from crec.logger import Logger
 
@@ -22,7 +19,6 @@ class GovInfoClient(httpx.AsyncClient):
         super().__init__(base_url='https://api.govinfo.gov/')
 
         self.api_key = 'VjAEDf7KZQF5WfSHJjuwz7HaEcbAkFdpQovrtf8S'
-        self.root_url = 'https://api.govinfo.gov/' # this is unnecessary - should use logic from client for relative urls, params
         self.wait = wait
         self.retry_limit = retry_limit
         self.logger = logger

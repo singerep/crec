@@ -31,7 +31,7 @@ class Downloader:
             self.logger.log(message=f'getting granules in batch {i + 1} of {len(batches)}')
             tasks = []
             for g in batch:
-                tasks.append(asyncio.create_task(g.async_get(client=client)))
+                tasks.append(asyncio.create_task(g.async_get(client=client, parse=self.parse, write=self.write)))
             
             await asyncio.gather(*tasks)
 

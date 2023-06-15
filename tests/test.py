@@ -20,8 +20,9 @@ import time
 #     '2018-01-15'
 # ])
 
-r = Record(start_date='2018-01-10', end_date='2018-01-10', granule_class_filter=['HOUSE'])
-print(r.passages.to_df(speaker_attributes=['bioGuideId', 'party']))
+r = Record(start_date='2018-01-09', end_date='2018-01-09', granule_class_filter=['SENATE'])
+print(len(r.text_collection.to_list()))
+# print(r.passages.to_df(speaker_attributes=['bioGuideId', 'party']))
 
 # r = Record(granule_ids=['CREC-2018-01-11-pt1-PgS153-3'], verbose=False)
 
@@ -32,3 +33,6 @@ print(r.passages.to_df(speaker_attributes=['bioGuideId', 'party']))
 # print(len(r.downloader.missing['granules']))
 
 # print(r.paragraphs)
+
+
+# r = Record()

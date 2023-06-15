@@ -26,8 +26,7 @@ class Granule:
         self.clean_text = ''
         self.speakers : Dict[int, Speaker] = {}
 
-        self.passages = TextCollection()
-        self.paragraphs = TextCollection()
+        self.text_collection = TextCollection()
 
         self.valid = False
 
@@ -73,8 +72,10 @@ class Granule:
             self.sub_granule_class = sgc.text
         
         for member in root.iter('{http://www.loc.gov/mods/v3}congMember'):
-            s = Speaker.from_member(member=member)
-            self.speakers[f's{len(self.speakers)}'] = s
+            role = member.attrib.get('role', None)
+            if role is not None and role == 'SPEAKING':
+                s = Speaker.from_member(member=member)
+                self.speakers[f's{len(self.speakers)}'] = s
 
     def parse_htm(self, raw_text):
         self.raw_text = raw_text
@@ -126,28 +127,29 @@ class Granule:
         if len(self.speakers) == 0:
             s = UNKNOWN_SPEAKER
             passage = Passage(granule_id=self.granule_id, speaker=s, text=self.clean_text)
-            self.passages.add(passage)
-            self.paragraphs.merge(passage.paragraphs)
+            self.text_collection.add_passage(passage=passage)
             return
 
-        speaker_search_str = '(' + '|'.join([f'(?P<{s_id}>\n  {s.parsed_name}\. )' for s_id, s in sorted(self.speakers.items(), key=lambda p : len(p[1].parsed_name), reverse=True)]) + ')'
-        speaker_matches = list(re.finditer(speaker_search_str, self.clean_text))
 
-        if len(speaker_matches) == 0 or speaker_matches[0].start() > 3:
+        sorted_speakers = sorted(self.speakers.items(), key=lambda p : len(p[1].parsed_name), reverse=True)
+        speaker_search_str = '(' + '|'.join([f'(?P<{s_id}>\n  {s.parsed_name}\. )' for s_id, s in sorted_speakers]) + ')'
+        new_speaker_matches = list(re.finditer(speaker_search_str, self.clean_text))
+
+        if len(new_speaker_matches) == 0 or new_speaker_matches[0].start() > 3:
             if len(self.speakers) == 1:
                 s = list(self.speakers.values())[0]
             else:
                 s = UNKNOWN_SPEAKER
-            end = None if len(speaker_matches) == 0 else speaker_matches[0].start()
-            passage = Passage(granule_id=self.granule_id, speaker=s, text=self.clean_text[0:end])
-            self.passages.add(passage)
-            self.paragraphs.merge(passage.paragraphs)
+            end = None if len(new_speaker_matches) == 0 else new_speaker_matches[0].start()
 
-        for i, match in enumerate(speaker_matches):
+            passage = Passage(granule_id=self.granule_id, speaker=s, text=self.clean_text[0:end])
+            self.text_collection.add_passage(passage=passage)
+
+        for i, match in enumerate(new_speaker_matches):
             s_id = [k for k, v in match.groupdict().items() if v != None][0]
             speaker = self.speakers[s_id]
             start = match.end()
-            end = speaker_matches[i + 1].start() if i < len(speaker_matches) - 1 else None
+            end = new_speaker_matches[i + 1].start() if i < len(new_speaker_matches) - 1 else None
+
             passage = Passage(granule_id=self.granule_id, speaker=speaker, text=self.clean_text[start:end])
-            self.passages.add(passage)
-            self.paragraphs.merge(passage.paragraphs)
+            self.text_collection.add_passage(passage=passage)
