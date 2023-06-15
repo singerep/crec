@@ -6,12 +6,10 @@ from typing import List, Dict
 import asyncio
 from itertools import chain
 
-from crec import GovInfoAPI
-from crec.paragraph import Paragraph
-from crec.passage import Passage
+from crec import GovInfoClient
 from crec.speaker import Speaker, UNKNOWN_SPEAKER
 from crec.constants import TITLES
-from crec.text_collection import TextCollection
+from crec.text import Passage, TextCollection
 
 
 class Granule:
@@ -34,7 +32,7 @@ class Granule:
         return f'{self.granule_id}'
 
     def get(self, client = None):
-        if isinstance(client, GovInfoAPI):
+        if isinstance(client, GovInfoClient):
             self.async_get(client=client)
         else:
             mods_response = httpx.get(self.mods_url)
@@ -42,7 +40,7 @@ class Granule:
 
             self.parse_responses(mods_response, htm_response)
 
-    async def async_get(self, client: GovInfoAPI):
+    async def async_get(self, client: GovInfoClient):
         mods_response_validity, mods_response = await client.get(self.mods_url)
         htm_response_validity, htm_response = await client.get(self.htm_url)
 
@@ -121,7 +119,6 @@ class Granule:
             return
 
         speaker_search_str = '(' + '|'.join([f'(?P<{s_id}>\n  {s.parsed_name}\. )' for s_id, s in sorted(self.speakers.items(), key=lambda p : len(p[1].parsed_name), reverse=True)]) + ')'
-        print(speaker_search_str)
         speaker_matches = list(re.finditer(speaker_search_str, self.clean_text))
 
         if len(speaker_matches) == 0 or speaker_matches[0].start() > 3:

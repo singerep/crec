@@ -6,36 +6,39 @@ import asyncio
 from httpx._client import ClientState
 import pandas as pd
 from itertools import chain
+import logging
 
-from crec import GovInfoAPI
+from crec import GovInfoClient
 from crec.granule import Granule
 from crec.package import Package
-from crec.paragraph import Paragraph
-from crec.speaker import UNKNOWN_SPEAKER
+from crec.logger import Logger
 
 
 class Downloader:
-    def __init__(self, batch_size: int = 200, wait: Union[bool, int] = 300, api_key=None) -> None:
+    def __init__(self, batch_size: int, wait: Union[bool, int], retry_limit: Union[bool, int], api_key: str, logger: Logger) -> None:
         self.batch_size = batch_size
-        self.client = GovInfoAPI(wait=wait)
+        self.client = GovInfoClient(wait=wait, retry_limit=retry_limit, logger=logger)
+        self.logger = logger
 
         self.missing = {'days': [], 'granules': []}
 
-    async def _get_granules_in_batch(self, granules: List[Granule], client: GovInfoAPI):
+    async def _get_granules_in_batch(self, granules: List[Granule], client: GovInfoClient):
         batches = [granules[i:i + self.batch_size] for i in range(0, len(granules), self.batch_size)]
         for i, batch in enumerate(batches):
-            print(f'getting batch {i + 1} out of {len(batches)}')
+            self.logger.log(message=f'getting granules in batch {i + 1} of {len(batches)}')
             tasks = []
             for g in batch:
                 tasks.append(asyncio.create_task(g.async_get(client=client)))
             
             await asyncio.gather(*tasks)
 
-        self.missing['granules'] += [g for g in granules if g.valid is False]
-        # return [g for g in granules if g.valid is True]
+        successes = [g for g in granules if g.valid is True]
+        failures = [g for g in granules if g.valid is False]
+        self.missing['granules'] += failures
+        self.logger.log(f'successfully got {len(successes)} of {len(granules)} granules; there were {len(failures)} failures')
         return granules
 
-    async def _get_granules_from_ids(self, granule_ids: List[str], client: GovInfoAPI) -> List[Granule]:
+    async def _get_granules_from_ids(self, granule_ids: List[str], client: GovInfoClient) -> List[Granule]:
         granules = [Granule(granule_id=g_id) for g_id in granule_ids]
 
         # this should probably not be like this, but it works. otherwise need more functions
@@ -51,10 +54,10 @@ class Downloader:
         granules = asyncio.run(self._get_granules_from_ids(granule_ids=granule_ids, client=self.client))
         return granules
 
-    async def _get_granule_ids_from_dates(self, dates: List[str], client: GovInfoAPI) -> List[str]:
+    async def _get_granule_ids_from_dates(self, dates: List[str], client: GovInfoClient) -> List[str]:
         granule_ids = []
         for d in dates:
-            p = Package(date=d, client=client)
+            p = Package(date=d, client=client, logger=self.logger)
             got_all_ids, p_granule_ids = await p.get_granule_ids(client=client)
             if got_all_ids:
                 granule_ids += p_granule_ids

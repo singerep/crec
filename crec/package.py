@@ -12,8 +12,9 @@ import httpx
 import asyncio
 import queue
 
-from crec import GovInfoAPI
+from crec.api import GovInfoClient
 from crec.granule import Granule
+from crec.logger import Logger
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -44,9 +45,10 @@ def generate_date_range(start_date: datetime.datetime, end_date: datetime.dateti
     return dates
 
 class Package:
-    def __init__(self, date: str, client: GovInfoAPI) -> None:
+    def __init__(self, date: str, client: GovInfoClient, logger: Logger) -> None:
         self.date = date
         self.client = client
+        self.logger = logger
 
         self.summary_url = f'packages/CREC-{date}/summary?api_key={client.api_key}'
         self.granules_url = f'packages/CREC-{date}/granules?offset=0&pageSize=100&api_key={client.api_key}'
@@ -84,7 +86,8 @@ class Package:
             g.parse_htm(raw_text)
             self.granules[g_id] = g
 
-    async def get_granule_ids(self, client: GovInfoAPI):
+    async def get_granule_ids(self, client: GovInfoClient):
+        self.logger.log(f'getting granule ids from {self.date}')
         got_all_ids = False
 
         granules_resp_validity, granules_resp = await client.get(self.granules_url, params={'offset': '0', 'pageSize': '100'})
