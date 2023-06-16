@@ -6,8 +6,8 @@ from crec.speaker import Speaker, UNKNOWN_SPEAKER
 
 
 class Paragraph:
-    def __init__(self, granule_id: str, speaker: Speaker, speaking: bool, text: str) -> None:
-        self.granule_id = granule_id
+    def __init__(self, granule_attributes: dict, speaker: Speaker, speaking: bool, text: str) -> None:
+        self.granule_attributes = granule_attributes
         self.speaker = speaker
         self.speaking = speaking
         self.text = ' '.join(text.split())
@@ -17,8 +17,8 @@ class Paragraph:
 
 
 class Passage:
-    def __init__(self, granule_id: str, speaker: Speaker, speaking: bool = True, text: str = '') -> None:
-        self.granule_id = granule_id
+    def __init__(self, granule_attributes: dict, speaker: Speaker, speaking: bool = True, text: str = '') -> None:
+        self.granule_attributes = granule_attributes
         self.speaker = speaker
         self.speaking = speaking
         self.text = f'\n  {text}'
@@ -37,7 +37,7 @@ class Passage:
             speaking = [k for k, v in match.groupdict().items() if v != None][0] == 'speaking'
             p_start = match.end()
             p_end = p_breaks[i + 1].start() if i < len(p_breaks) - 1 else None
-            paragraph = Paragraph(granule_id=self.granule_id, speaker=self.speaker, speaking=speaking, text=self.text[p_start:p_end])
+            paragraph = Paragraph(granule_attributes=self.granule_attributes, speaker=self.speaker, speaking=speaking, text=self.text[p_start:p_end])
             self.paragraph_collection.add(paragraph)
 
     @property
@@ -69,16 +69,18 @@ class ParagraphCollection:
 
         return valid_paragraphs
 
-    def to_df(self, include_unknown_speakers: bool = False, include_non_speaking: bool = False, speaker_attributes: List[str] = ['bioGuideId'], search: str = None) -> pd.DataFrame:
+    def to_df(self, include_unknown_speakers: bool = False, include_non_speaking: bool = False, granule_attributes: List[str] = ['granule_id'], speaker_attributes: List[str] = ['bioGuideId'], search: str = None) -> pd.DataFrame:
         valid_paragraphs = self.to_list(include_unknown_speakers=include_unknown_speakers, include_non_speaking=include_non_speaking, search=search)
         paragraph_dicts = []
         for paragraph in valid_paragraphs:
-            paragraph_dict = {
-                'granule_id': paragraph.granule_id,
-                'text': paragraph.text,
-                'speaker': paragraph.speaker.first_last,
-                'speaking': paragraph.speaking
-            }
+            paragraph_dict = {}
+            for attr in granule_attributes:
+                paragraph_dict[attr] = paragraph.granule_attributes.get(attr, None)
+
+            paragraph_dict['text'] = paragraph.text
+            paragraph_dict['speaker'] = paragraph.speaker.first_last
+            paragraph_dict['speaking'] = paragraph.speaking
+            
             for attr in speaker_attributes:
                 paragraph_dict[attr] = paragraph.speaker.get_attribute(attr)
             paragraph_dicts.append(paragraph_dict)
@@ -108,17 +110,20 @@ class PassageCollection:
 
         return valid_passages
 
-    def to_df(self, include_unknown_speakers: bool = False, speaker_attributes: List[str] = ['bioGuideId'], search: str = None) -> pd.DataFrame:
+    def to_df(self, include_unknown_speakers: bool = False, granule_attributes: List[str] = ['granule_id'], speaker_attributes: List[str] = ['bioGuideId'], search: str = None) -> pd.DataFrame:
         valid_passages = self.to_list(include_unknown_speakers=include_unknown_speakers, search=search)
         passage_dicts = []
         for passage in valid_passages:
-            passage_dict = {
-                'granule_id': passage.granule_id,
-                'text': passage.text,
-                'speaker': passage.speaker.first_last
-            }
+            passage_dict = {}
+            for attr in granule_attributes:
+                passage_dict[attr] = passage.granule_attributes.get(attr, None)
+
+            passage_dict['text'] = passage.text
+            passage_dict['speaker'] = passage.speaker.first_last
+            
             for attr in speaker_attributes:
                 passage_dict[attr] = passage.speaker.get_attribute(attr)
+            
             passage_dicts.append(passage_dict)
 
         return pd.DataFrame(passage_dicts)
@@ -141,18 +146,18 @@ class TextCollection:
     def add_paragraph(self, paragraph: Paragraph) -> None:
         self.paragraph_collection.add(paragraph=paragraph)
 
-    def to_list(self, unit: str = 'passage'):
+    def to_list(self, unit: str = 'passage', include_unknown_speakers: bool = False, include_non_speaking: bool = False, search: str = None):
         if unit == 'passage':
-            return self.passage_collection.to_list()
+            return self.passage_collection.to_list(include_unknown_speakers=include_unknown_speakers, search=search)
         elif unit == 'paragraph':
-            return self.paragraph_collection.to_list()
+            return self.paragraph_collection.to_list(include_unknown_speakers=include_unknown_speakers, include_non_speaking=include_non_speaking, search=search)
         else:
             raise ValueError("unit must be passage or paragraph")
 
-    def to_df(self, unit: str = 'passage'):
+    def to_df(self, unit: str = 'passage', include_unknown_speakers: bool = False, include_non_speaking: bool = False, granule_attributes: List[str] = ['granule_id'], speaker_attributes: List[str] = ['bioGuideId'], search: str = None):
         if unit == 'passage':
-            return self.passage_collection.to_df()
+            return self.passage_collection.to_df(include_unknown_speakers=include_unknown_speakers, granule_attributes=granule_attributes, speaker_attributes=speaker_attributes, search=search)
         elif unit == 'paragraph':
-            return self.paragraph_collection.to_df()
+            return self.paragraph_collection.to_df(include_unknown_speakers=include_unknown_speakers, include_non_speaking=include_non_speaking, granule_attributes=granule_attributes, speaker_attributes=speaker_attributes, search=search)
         else:
             raise ValueError("unit must be passage or paragraph")

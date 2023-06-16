@@ -4,23 +4,20 @@ from collections import defaultdict, namedtuple
 import re
 import httpx
 from typing import List, Dict, Union
-import asyncio
-from itertools import chain
+import os
 
-from crec import GovInfoClient
+from crec.api import GovInfoClient
 from crec.speaker import Speaker, UNKNOWN_SPEAKER
-from crec.constants import TITLES
+from crec.constants import TITLES, GRANULE_ATTRIBUTES
 from crec.text import Passage, TextCollection
 
 
 class Granule:
     def __init__(self, granule_id: str) -> None:
-        self.granule_id = granule_id
-        self.granule_class = None
-        self.sub_granule_class = None
-        self.date = self.granule_id[5:15]
-        self.mods_url = f'packages/CREC-{self.date}/granules/{self.granule_id}/mods'
-        self.htm_url = f'packages/CREC-{self.date}/granules/{self.granule_id}/htm'
+        self.attributes = {}
+        self.attributes['granuleId'] = granule_id
+        self.mods_url = f'packages/CREC-{granule_id[5:15]}/granules/{granule_id}/mods'
+        self.htm_url = f'packages/CREC-{granule_id[5:15]}/granules/{granule_id}/htm'
 
         self.raw_text = ''
         self.clean_text = ''
@@ -28,10 +25,16 @@ class Granule:
 
         self.text_collection = TextCollection()
 
-        self.valid = False
+        self.valid_responses = False
+        self.parsed = False
+        self.written = False
+        self.complete = False
+
+        self.parse_exception = None
+        self.write_exception = None
 
     def __repr__(self) -> str:
-        return f'{self.granule_id}'
+        raise NotImplementedError
 
     def get(self, client = None):
         if isinstance(client, GovInfoClient):
@@ -46,30 +49,64 @@ class Granule:
         mods_response_validity, mods_response = await client.get(self.mods_url)
         htm_response_validity, htm_response = await client.get(self.htm_url)
 
-        if parse:
-            if mods_response_validity and htm_response_validity:
-                self.parse_responses(mods_response, htm_response)
+        if mods_response_validity and htm_response_validity: 
+            self.valid_responses = True
+            if parse:
+                self.parse_responses(mods_response=mods_response, htm_response=htm_response)
+
+            if isinstance(write, str):
+                self.write_responses(write=write, mods_response=mods_response, htm_response=htm_response)
+
+        if parse is True and isinstance(write, str):
+            if self.parsed and self.written:
+                self.complete = True
+        elif parse is False and isinstance(write, str):
+            if self.written:
+                self.complete = True
+        elif parse is True and write is False:
+            if self.parsed:
+                self.complete = True
         else:
-            self.valid = True
-
-        if write:
-            raise NotImplementedError
-
+            self.complete = True
+            
     def parse_responses(self, mods_response: httpx.Response, htm_response: httpx.Response):
-        mods_content = mods_response.content
-        root = et.fromstring(mods_content)
-        self.parse_xml(root)
+        try:
+            mods_content = mods_response.content
+            root = et.fromstring(mods_content)
+            self.parse_xml(root)
 
-        raw_text = htm_response.text
-        self.parse_htm(raw_text)
+            raw_text = htm_response.text
+            self.parse_htm(raw_text)
 
-        self.valid = True
+            self.parsed = True
+        except Exception as e:
+            self.parse_exception = e
+
+    def write_responses(self, write: str, mods_response: httpx.Response, htm_response: httpx.Response):
+        try:
+            granule_id = self.attributes['granuleId']
+            wd = os.getcwd()
+            if not os.path.isabs(write):
+                xml_path = os.path.join(wd, f'{write}/{granule_id}.xml')
+                htm_path = os.path.join(wd, f'{write}/{granule_id}.htm')
+            else:
+                xml_path = f'{write}/{granule_id}.xml'
+                htm_path = f'{write}/{granule_id}.htm'
+
+            with open(xml_path, 'w') as xml_file:
+                xml_file.write(mods_response.text)
+
+            with open(htm_path, 'w') as htm_file:
+                htm_file.write(htm_response.text)
+
+            self.written = True
+        except Exception as e:
+            self.write_exception = e
 
     def parse_xml(self, root: Element):
-        for gc in root.iter('{http://www.loc.gov/mods/v3}granuleClass'):
-            self.granule_class = gc.text
-        for sgc in root.iter('{http://www.loc.gov/mods/v3}subGranuleClass'):
-            self.sub_granule_class = sgc.text
+        for attr in GRANULE_ATTRIBUTES:
+            for e in root.iter('{http://www.loc.gov/mods/v3}' + attr):
+                self.attributes[attr] = e.text
         
         for member in root.iter('{http://www.loc.gov/mods/v3}congMember'):
             role = member.attrib.get('role', None)
@@ -85,7 +122,6 @@ class Granule:
         text = re.sub(r'<bullet>', ' ', text)
 
         # remove title block
-        # \n\s+[a-zA-Z1-9\.\-, ]+(?:(?:\r*){2})
         title_block_match = re.search(r'(?<!\n|])\n(?=\n)', text)
         if title_block_match is not None:
             text = text[title_block_match.end():]
@@ -106,9 +142,6 @@ class Granule:
         # remove times
         text = re.sub('\s+\{time\}\s+\d+(\s+|)', ' ', text)
 
-        # remove notes
-        # text = re.sub('=+ NOTE =+(?s).+=+ END NOTE =+', '\n', text)
-
         self.clean_text = text
 
         self.find_titled_speakers()
@@ -126,30 +159,29 @@ class Granule:
     def find_passages(self):
         if len(self.speakers) == 0:
             s = UNKNOWN_SPEAKER
-            passage = Passage(granule_id=self.granule_id, speaker=s, text=self.clean_text)
-            self.text_collection.add_passage(passage=passage)
-            return
-
-
-        sorted_speakers = sorted(self.speakers.items(), key=lambda p : len(p[1].parsed_name), reverse=True)
-        speaker_search_str = '(' + '|'.join([f'(?P<{s_id}>\n  {s.parsed_name}\. )' for s_id, s in sorted_speakers]) + ')'
-        new_speaker_matches = list(re.finditer(speaker_search_str, self.clean_text))
-
-        if len(new_speaker_matches) == 0 or new_speaker_matches[0].start() > 3:
-            if len(self.speakers) == 1:
-                s = list(self.speakers.values())[0]
-            else:
-                s = UNKNOWN_SPEAKER
-            end = None if len(new_speaker_matches) == 0 else new_speaker_matches[0].start()
-
-            passage = Passage(granule_id=self.granule_id, speaker=s, text=self.clean_text[0:end])
+            passage = Passage(granule_attributes=self.attributes, speaker=s, text=self.clean_text)
             self.text_collection.add_passage(passage=passage)
 
-        for i, match in enumerate(new_speaker_matches):
-            s_id = [k for k, v in match.groupdict().items() if v != None][0]
-            speaker = self.speakers[s_id]
-            start = match.end()
-            end = new_speaker_matches[i + 1].start() if i < len(new_speaker_matches) - 1 else None
+        else:
+            sorted_speakers = sorted(self.speakers.items(), key=lambda p : len(p[1].parsed_name), reverse=True)
+            speaker_search_str = '(' + '|'.join([f'(?P<{s_id}>\n  {s.parsed_name}\. )' for s_id, s in sorted_speakers]) + ')'
+            new_speaker_matches = list(re.finditer(speaker_search_str, self.clean_text))
 
-            passage = Passage(granule_id=self.granule_id, speaker=speaker, text=self.clean_text[start:end])
-            self.text_collection.add_passage(passage=passage)
+            if len(new_speaker_matches) == 0 or new_speaker_matches[0].start() > 3:
+                if len(self.speakers) == 1:
+                    s = list(self.speakers.values())[0]
+                else:
+                    s = UNKNOWN_SPEAKER
+                end = None if len(new_speaker_matches) == 0 else new_speaker_matches[0].start()
+
+                passage = Passage(granule_attributes=self.attributes, speaker=s, text=self.clean_text[0:end])
+                self.text_collection.add_passage(passage=passage)
+
+            for i, match in enumerate(new_speaker_matches):
+                s_id = [k for k, v in match.groupdict().items() if v != None][0]
+                speaker = self.speakers[s_id]
+                start = match.end()
+                end = new_speaker_matches[i + 1].start() if i < len(new_speaker_matches) - 1 else None
+
+                passage = Passage(granule_attributes=self.attributes, speaker=speaker, text=self.clean_text[start:end])
+                self.text_collection.add_passage(passage=passage)

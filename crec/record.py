@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Dict, Union
 import datetime
 import itertools
 
@@ -79,6 +79,14 @@ class Record:
 
         for g in self.granules:
             self.text_collection.merge(g.text_collection)
+
+    @property
+    def incomplete_days(self) -> set:
+        return self.downloader.incomplete_days
+    
+    @property
+    def incomplete_granules(self) -> set:
+        return self.downloader.incomplete_granules
 
     @property
     def raw_text(self) -> List[str]:

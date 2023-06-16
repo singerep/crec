@@ -8,7 +8,7 @@ import pandas as pd
 from itertools import chain
 import logging
 
-from crec import GovInfoClient
+from crec.api import GovInfoClient
 from crec.granule import Granule
 from crec.package import Package
 from crec.logger import Logger
@@ -20,12 +20,15 @@ class Downloader:
         self.parse = parse
         self.write = write
         self.batch_size = batch_size
-        self.client = GovInfoClient(wait=wait, retry_limit=retry_limit, logger=logger)
+        self.client = GovInfoClient(wait=wait, retry_limit=retry_limit, logger=logger, api_key=api_key)
         self.logger = logger
 
-        self.missing = {'days': [], 'granules': []}
+        self.incomplete_days = set()
+        self.incomplete_granules = set()
 
     async def _get_granules_in_batch(self, granules: List[Granule], client: GovInfoClient):
+        self.incomplete_granules = set([g.attributes['granuleId'] for g in granules])
+
         batches = [granules[i:i + self.batch_size] for i in range(0, len(granules), self.batch_size)]
         for i, batch in enumerate(batches):
             self.logger.log(message=f'getting granules in batch {i + 1} of {len(batches)}')
@@ -35,10 +38,23 @@ class Downloader:
             
             await asyncio.gather(*tasks)
 
-        successes = [g for g in granules if g.valid is True]
-        failures = [g for g in granules if g.valid is False]
-        self.missing['granules'] += failures
-        self.logger.log(f'successfully got {len(successes)} of {len(granules)} granules; there were {len(failures)} failures')
+        # successes = [g for g in granules if g.complete is True]
+        # failures = [g for g in granules if g.complete is False]
+        # self.incomplete['granules'] += failures
+        for g in granules:
+            if g.complete:
+                self.incomplete_granules.remove(g.attributes['granuleId'])
+
+        if self.parse is True and isinstance(self.write, str):
+            action_string = 'got, parsed, and wrote'
+        elif self.parse is False and isinstance(self.write, str):
+            action_string = 'got and wrote'
+        elif self.parse is True and self.write is False:
+            action_string = 'got and parsed'
+        else:
+            action_string = 'got'
+
+        self.logger.log(f'successfully {action_string} {len(granules) - len(self.incomplete_granules)} of {len(granules)} granules; there were {len(self.incomplete_granules)} failures')
         return granules
 
     async def _get_granules_from_ids(self, granule_ids: List[str], client: GovInfoClient) -> List[Granule]:
@@ -58,14 +74,14 @@ class Downloader:
         return granules
 
     async def _get_granule_ids_from_dates(self, dates: List[str], client: GovInfoClient) -> List[str]:
+        self.incomplete_days = set(dates)
         granule_ids = []
         for d in dates:
             p = Package(date=d, client=client, logger=self.logger)
             got_all_ids, p_granule_ids = await p.get_granule_ids(client=client, granule_class_filters=self.granule_class_filters)
             if got_all_ids:
                 granule_ids += p_granule_ids
-            else:
-                self.missing['days'].append(d)
+                self.incomplete_days.remove(d)
 
         return granule_ids
 
@@ -79,19 +95,3 @@ class Downloader:
     def get_from_dates(self, dates: List[str] = []):
         granules = asyncio.run(self._get_granules_from_dates(dates=dates))
         return granules
-
-    # @property
-    # def all_raw_text(self) -> List[str]:
-    #     return [g.raw_text for g in self.granules]
-
-    # @property
-    # def all_clean_text(self) -> List[str]:
-    #     return [g.clean_text for g in self.granules]
-
-    # @property
-    # def paragraphs(self):
-    #     return list(chain(*(g.paragraphs for g in self.granules)))
-
-    # @property
-    # def passages(self):
-    #     return list(chain(*(g.passages for g in self.granules)))
