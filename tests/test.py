@@ -1,9 +1,6 @@
-from crec.package import Package
-from crec.granule import Granule
-from crec.downloader import Downloader
-from crec.record import Record
+from crec import Record
 
-import time
+api_key = 'VjAEDf7KZQF5WfSHJjuwz7HaEcbAkFdpQovrtf8S'
 
 # r = Record(dates=[
 #     '2018-01-04',
@@ -20,11 +17,15 @@ import time
 #     '2018-01-15'
 # ])
 
-r = Record(start_date='2018-01-04', end_date='2019-01-04')
+# r = Record(start_date='2018-01-04', end_date='2019-01-04')
 
+# print(r.incomplete_days)
+# print(r.incomplete_granules)
+# print(r.text_collection.to_df(granule_attributes=['granuleId', 'granuleDate', 'granuleClass', 'subGranuleClass']))
 # print(r.passages.to_df(speaker_attributes=['bioGuideId', 'party']))
 
-# r = Record.from_granule_ids(['CREC-2018-01-11-pt1-PgS153-3'])
+r = Record(granule_ids=['CREC-2018-01-11-pt1-PgS153-3'], api_key=api_key)
+
 # print(r.granules[0].raw_text)
 # print(r.passages.to_list())
 # print(r.passages.to_df(speaker_attributes=['bioGuideId', 'party']))
@@ -32,3 +33,6 @@ r = Record(start_date='2018-01-04', end_date='2019-01-04')
 # print(len(r.downloader.missing['granules']))
 
 # print(r.paragraphs)
+
+
+# r = Record()

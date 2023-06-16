@@ -1,14 +1,15 @@
 import httpx
-import time
 from typing import Union
 import asyncio
-from collections import defaultdict
-from enum import Enum
 
 from crec.logger import Logger
 
 
 class RateLimitError(BaseException):
+    pass
+
+
+class APIKeyError(BaseException):
     pass
 
 
@@ -18,11 +19,10 @@ class ResponseMeta:
 
 
 class GovInfoClient(httpx.AsyncClient):
-    def __init__(self, wait: Union[bool, int], retry_limit: Union[bool, int], logger: Logger):
+    def __init__(self, wait: Union[bool, int], retry_limit: Union[bool, int], logger: Logger, api_key: str):
         super().__init__(base_url='https://api.govinfo.gov/')
 
-        self.api_key = 'VjAEDf7KZQF5WfSHJjuwz7HaEcbAkFdpQovrtf8S'
-        self.root_url = 'https://api.govinfo.gov/' # this is unnecessary - should use logic from client for relative urls, params
+        self.api_key = api_key
         self.wait = wait
         self.retry_limit = retry_limit
         self.logger = logger
@@ -39,17 +39,23 @@ class GovInfoClient(httpx.AsyncClient):
                 response = None
 
             if response is None:
+                self.logger.log(message=f'httpx error; trying again')
                 await asyncio.sleep(2)
                 continue
 
+            if response.status_code == 401:
+                raise APIKeyError('invalid api_key')
+
             if 'OVER_RATE_LIMIT' in response.text:
-                if isinstance(self.wait, int):
+                if type(self.wait) == int:
                     self.logger.log(message=f'exceeded rate limit; pausing for {self.wait} seconds now')
                     await asyncio.sleep(self.wait)
                 else:
-                    raise RateLimitError
+                    raise RateLimitError('you have exceeded the rate limit; halting now')
 
             if response.status_code != 200:
+                self.logger.log(message=f'api error; trying again')
+                print(response.status_code)
                 await asyncio.sleep(2)
                 continue
 

@@ -1,3 +1,1 @@
-from .api import *
-from .package import *
-from .granule import *
+from .record import Record
