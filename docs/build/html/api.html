@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API documentation &mdash; crec  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Getting started" href="getting_started.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            crec
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#crec.record.Record"><code class="docutils literal notranslate"><span class="pre">Record</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#crec.record.Record.passages"><code class="docutils literal notranslate"><span class="pre">Record.passages</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.record.Record.paragraphs"><code class="docutils literal notranslate"><span class="pre">Record.paragraphs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.record.Record.incomplete_days"><code class="docutils literal notranslate"><span class="pre">Record.incomplete_days</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.record.Record.incomplete_granules"><code class="docutils literal notranslate"><span class="pre">Record.incomplete_granules</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.record.Record.raw_text"><code class="docutils literal notranslate"><span class="pre">Record.raw_text</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.record.Record.clean_text"><code class="docutils literal notranslate"><span class="pre">Record.clean_text</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#crec.granule.get_granule_ids"><code class="docutils literal notranslate"><span class="pre">get_granule_ids()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#crec.granule.Granule"><code class="docutils literal notranslate"><span class="pre">Granule</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#crec.granule.Granule.attributes"><code class="docutils literal notranslate"><span class="pre">Granule.attributes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.granule.Granule.xml_url"><code class="docutils literal notranslate"><span class="pre">Granule.xml_url</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.granule.Granule.htm_url"><code class="docutils literal notranslate"><span class="pre">Granule.htm_url</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.granule.Granule.raw_text"><code class="docutils literal notranslate"><span class="pre">Granule.raw_text</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.granule.Granule.clean_text"><code class="docutils literal notranslate"><span class="pre">Granule.clean_text</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.granule.Granule.speakers"><code class="docutils literal notranslate"><span class="pre">Granule.speakers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.granule.Granule.valid_responses"><code class="docutils literal notranslate"><span class="pre">Granule.valid_responses</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.granule.Granule.parsed"><code class="docutils literal notranslate"><span class="pre">Granule.parsed</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.granule.Granule.written"><code class="docutils literal notranslate"><span class="pre">Granule.written</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.granule.Granule.complete"><code class="docutils literal notranslate"><span class="pre">Granule.complete</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.granule.Granule.parse_exception"><code class="docutils literal notranslate"><span class="pre">Granule.parse_exception</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.granule.Granule.write_exception"><code class="docutils literal notranslate"><span class="pre">Granule.write_exception</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.granule.Granule.passages"><code class="docutils literal notranslate"><span class="pre">Granule.passages</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.granule.Granule.paragraphs"><code class="docutils literal notranslate"><span class="pre">Granule.paragraphs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.granule.Granule.async_get"><code class="docutils literal notranslate"><span class="pre">Granule.async_get()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.granule.Granule.parse_responses"><code class="docutils literal notranslate"><span class="pre">Granule.parse_responses()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.granule.Granule.write_responses"><code class="docutils literal notranslate"><span class="pre">Granule.write_responses()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.granule.Granule.parse_xml"><code class="docutils literal notranslate"><span class="pre">Granule.parse_xml()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.granule.Granule.parse_htm"><code class="docutils literal notranslate"><span class="pre">Granule.parse_htm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.granule.Granule.find_titled_speakers"><code class="docutils literal notranslate"><span class="pre">Granule.find_titled_speakers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.granule.Granule.find_passages"><code class="docutils literal notranslate"><span class="pre">Granule.find_passages()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#crec.text.Paragraph"><code class="docutils literal notranslate"><span class="pre">Paragraph</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#crec.text.Passage"><code class="docutils literal notranslate"><span class="pre">Passage</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#crec.text.Passage.paragraph_collection"><code class="docutils literal notranslate"><span class="pre">Passage.paragraph_collection</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.text.Passage.clean_text"><code class="docutils literal notranslate"><span class="pre">Passage.clean_text</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.text.Passage.split_into_paragraphs"><code class="docutils literal notranslate"><span class="pre">Passage.split_into_paragraphs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#crec.text.ParagraphCollection"><code class="docutils literal notranslate"><span class="pre">ParagraphCollection</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#crec.text.ParagraphCollection.paragraphs"><code class="docutils literal notranslate"><span class="pre">ParagraphCollection.paragraphs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.text.ParagraphCollection.merge"><code class="docutils literal notranslate"><span class="pre">ParagraphCollection.merge()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.text.ParagraphCollection.add"><code class="docutils literal notranslate"><span class="pre">ParagraphCollection.add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.text.ParagraphCollection.to_list"><code class="docutils literal notranslate"><span class="pre">ParagraphCollection.to_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.text.ParagraphCollection.to_df"><code class="docutils literal notranslate"><span class="pre">ParagraphCollection.to_df()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#crec.text.PassageCollection"><code class="docutils literal notranslate"><span class="pre">PassageCollection</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#crec.text.PassageCollection.passages"><code class="docutils literal notranslate"><span class="pre">PassageCollection.passages</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.text.PassageCollection.paragraphs"><code class="docutils literal notranslate"><span class="pre">PassageCollection.paragraphs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.text.PassageCollection.merge"><code class="docutils literal notranslate"><span class="pre">PassageCollection.merge()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.text.PassageCollection.add"><code class="docutils literal notranslate"><span class="pre">PassageCollection.add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.text.PassageCollection.to_list"><code class="docutils literal notranslate"><span class="pre">PassageCollection.to_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.text.PassageCollection.to_df"><code class="docutils literal notranslate"><span class="pre">PassageCollection.to_df()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#crec.speaker.Speaker"><code class="docutils literal notranslate"><span class="pre">Speaker</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#crec.speaker.Speaker.from_title"><code class="docutils literal notranslate"><span class="pre">Speaker.from_title()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.speaker.Speaker.from_member"><code class="docutils literal notranslate"><span class="pre">Speaker.from_member()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.speaker.Speaker.get_attribute"><code class="docutils literal notranslate"><span class="pre">Speaker.get_attribute()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#crec.downloader.Downloader"><code class="docutils literal notranslate"><span class="pre">Downloader</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#crec.downloader.Downloader.client"><code class="docutils literal notranslate"><span class="pre">Downloader.client</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.downloader.Downloader.incomplete_days"><code class="docutils literal notranslate"><span class="pre">Downloader.incomplete_days</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.downloader.Downloader.incomplete_granules"><code class="docutils literal notranslate"><span class="pre">Downloader.incomplete_granules</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.downloader.Downloader.get_granules_in_batch"><code class="docutils literal notranslate"><span class="pre">Downloader.get_granules_in_batch()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.downloader.Downloader.get_granules_from_ids"><code class="docutils literal notranslate"><span class="pre">Downloader.get_granules_from_ids()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.downloader.Downloader.get_from_ids"><code class="docutils literal notranslate"><span class="pre">Downloader.get_from_ids()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.downloader.Downloader.get_granule_ids_from_dates"><code class="docutils literal notranslate"><span class="pre">Downloader.get_granule_ids_from_dates()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.downloader.Downloader.get_granules_from_dates"><code class="docutils literal notranslate"><span class="pre">Downloader.get_granules_from_dates()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crec.downloader.Downloader.get_from_dates"><code class="docutils literal notranslate"><span class="pre">Downloader.get_from_dates()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#crec.api.RateLimitError"><code class="docutils literal notranslate"><span class="pre">RateLimitError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#crec.api.APIKeyError"><code class="docutils literal notranslate"><span class="pre">APIKeyError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#crec.api.GovInfoClient"><code class="docutils literal notranslate"><span class="pre">GovInfoClient</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#crec.api.GovInfoClient.get"><code class="docutils literal notranslate"><span class="pre">GovInfoClient.get()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#crec.logger.DuplicateFilter"><code class="docutils literal notranslate"><span class="pre">DuplicateFilter</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#crec.logger.DuplicateFilter.filter"><code class="docutils literal notranslate"><span class="pre">DuplicateFilter.filter()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#crec.logger.Logger"><code class="docutils literal notranslate"><span class="pre">Logger</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#crec.logger.Logger.log"><code class="docutils literal notranslate"><span class="pre">Logger.log()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">crec</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">API documentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-crec.record">
+<span id="api-documentation"></span><h1>API documentation<a class="headerlink" href="#module-crec.record" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="crec.record.Record">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">crec.record.</span></span><span class="sig-name descname"><span class="pre">Record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">datetime</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">datetime</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">datetime</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">granule_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">granule_class_filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parse</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_wait</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate_limit_wait</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_outpath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crec.record.Record" title="Permalink to this definition"></a></dt>
+<dd><p>A collection of Congressional Record data from GovInfo’s Congressional Record API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_date</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>datetime.datetime</em><em>] </em><em>= None</em>) – First date for which CREC data will be retrieved.</p></li>
+<li><p><strong>end_date</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>datetime.datetime</em><em>] </em><em>= None</em>) – Last date for which CREC data will be retrieved.</p></li>
+<li><p><strong>dates</strong> (<em>List</em><em>[</em><em>Union</em><em>[</em><em>str</em><em>, </em><em>datetime.datetime</em><em>]</em><em>] </em><em>= None</em>) – A custom list of dates to be used instead of the range created by
+<code class="docutils literal notranslate"><span class="pre">start_date</span></code> and <code class="docutils literal notranslate"><span class="pre">end_date</span></code>.</p></li>
+<li><p><strong>granule_ids</strong> (<em>List</em><em>[</em><em>str</em><em>] </em><em>= None</em>) – A list of official granule identifiers to be used instead of
+<code class="docutils literal notranslate"><span class="pre">start_date</span></code> and <code class="docutils literal notranslate"><span class="pre">end_date</span></code> or <code class="docutils literal notranslate"><span class="pre">dates</span></code>.</p></li>
+<li><p><strong>granule_class_filter</strong> (<em>List</em><em>[</em><em>str</em><em>] </em><em>= None</em>) – <p>If provided, only granules with a class listed in <code class="docutils literal notranslate"><span class="pre">granule_class_filter</span></code>
+will be retrieved. If <code class="docutils literal notranslate"><span class="pre">granule_class_filter</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, all granules
+are included. The class options are:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">HOUSE</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SENATE</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EXTENSIONS</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DAILYDIGEST</span></code></p></li>
+</ul>
+</p></li>
+<li><p><strong>parse</strong> (<em>bool = True</em>) – A boolean that indicates whether or not the text of granules should be parsed.
+See <a class="reference internal" href="#crec.granule.Granule.parse_htm" title="crec.granule.Granule.parse_htm"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Granule.parse_htm()</span></code></a> for more information.
+TODO: might want to warn/prohibit if both parse and write are False
+TODO: consider combining parse and write into one parameter, maybe using enums</p></li>
+<li><p><strong>write</strong> (<em>Union</em><em>[</em><em>bool</em><em>, </em><em>str</em><em>] </em><em>= False</em>) – If <code class="docutils literal notranslate"><span class="pre">write</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>, then granule text (htm files) and metadata (xml files)
+will not be written to disk. Otherwise, <code class="docutils literal notranslate"><span class="pre">write</span></code> should be a path where those
+files should be written to.</p></li>
+<li><p><strong>batch_size</strong> (<em>int = 200</em>) – The number of granules to asynchronously attempt to get at the same time.
+Too high of a number will result in frequent rate limit issues.</p></li>
+<li><p><strong>batch_wait</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>bool</em><em>] </em><em>= 2</em>) – If <code class="docutils literal notranslate"><span class="pre">batch_wait</span></code> is an <code class="docutils literal notranslate"><span class="pre">int</span></code>, then after requesting granule data in each
+batch of size <code class="docutils literal notranslate"><span class="pre">batch_size</span></code>, the program will halt for <code class="docutils literal notranslate"><span class="pre">batch_wait</span></code> seconds.
+Otherwise, <code class="docutils literal notranslate"><span class="pre">batch_size</span></code> should be <code class="docutils literal notranslate"><span class="pre">False</span></code>, and the program will not pause
+after each batch.
+TODO: make sure that this is at least decent behavior</p></li>
+<li><p><strong>rate_limit_wait</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>bool</em><em>] </em><em>= 300</em>) – If <code class="docutils literal notranslate"><span class="pre">rate_limit_wait</span></code> is an <code class="docutils literal notranslate"><span class="pre">int</span></code>, then exceeding the GovInfo rate limit
+will cause the program to halt for <code class="docutils literal notranslate"><span class="pre">rate_limit_wait</span></code> seconds. Otherwise,
+<code class="docutils literal notranslate"><span class="pre">rate_limit_wait</span></code> should be <code class="docutils literal notranslate"><span class="pre">False</span></code>, and exceeding the rate limit will
+throw an uncaught exception.</p></li>
+<li><p><strong>retry_limit</strong> (<em>Union</em><em>[</em><em>bool</em><em>, </em><em>int</em><em>] </em><em>= 5</em>) – If <code class="docutils literal notranslate"><span class="pre">retry_limit</span></code> is an <code class="docutils literal notranslate"><span class="pre">int</span></code>, then the program will attempt to request
+URLs up to <code class="docutils literal notranslate"><span class="pre">retry_limit</span></code> times before moving on. Otherwise, <code class="docutils literal notranslate"><span class="pre">retry_limit</span></code>
+should be <code class="docutils literal notranslate"><span class="pre">False</span></code>, and URLs will only be tried once.</p></li>
+<li><p><strong>api_key</strong> (<em>str = None</em>) – API key from GovInfo. Can be obtained by visiting
+<a class="reference external" href="https://www.govinfo.gov/api-signup">https://www.govinfo.gov/api-signup</a></p></li>
+<li><p><strong>verbose</strong> (<em>bool = True</em>) – Controls whether or not logs are generated. If <code class="docutils literal notranslate"><span class="pre">verbose</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, logs
+will (at minimum) be written to stout.</p></li>
+<li><p><strong>logger_outpath</strong> (<em>str = None</em>) – If provided, logs will also be written to <code class="docutils literal notranslate"><span class="pre">logger_outpath</span></code>. Otherwise, logs
+are only written to stoud.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.record.Record.passages">
+<span class="sig-name descname"><span class="pre">passages</span></span><a class="headerlink" href="#crec.record.Record.passages" title="Permalink to this definition"></a></dt>
+<dd><p>Stores the <a class="reference internal" href="#crec.text.Passage" title="crec.text.Passage"><code class="xref py py-class docutils literal notranslate"><span class="pre">Passage</span></code></a> objects associated with this retrieved granule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#crec.text.PassageCollection" title="crec.text.PassageCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">PassageCollection</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.record.Record.paragraphs">
+<span class="sig-name descname"><span class="pre">paragraphs</span></span><a class="headerlink" href="#crec.record.Record.paragraphs" title="Permalink to this definition"></a></dt>
+<dd><p>Stores the <a class="reference internal" href="#crec.text.Paragraph" title="crec.text.Paragraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paragraph</span></code></a> objects associated with the retrieved granules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#crec.text.ParagraphCollection" title="crec.text.ParagraphCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParagraphCollection</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="crec.record.Record.incomplete_days">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">incomplete_days</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#crec.record.Record.incomplete_days" title="Permalink to this definition"></a></dt>
+<dd><p>A set of date strings that did <em>not</em> have all of their associated granule
+identifiers retrieved.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="crec.record.Record.incomplete_granules">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">incomplete_granules</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#crec.record.Record.incomplete_granules" title="Permalink to this definition"></a></dt>
+<dd><p>A set of granule identifiers that did <em>not</em> have their data retrieved,
+parsed, or written to disk (depending on requested behavior).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="crec.record.Record.raw_text">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">raw_text</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#crec.record.Record.raw_text" title="Permalink to this definition"></a></dt>
+<dd><p>A list containing the text of each granule without elements like headers,
+page numbers, and times removed.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="crec.record.Record.clean_text">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">clean_text</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#crec.record.Record.clean_text" title="Permalink to this definition"></a></dt>
+<dd><p>A list containing the text of each granule with elements like headers,
+page numbers, and times removed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-crec.granule"></span><dl class="py function">
+<dt class="sig sig-object py" id="crec.granule.get_granule_ids">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">crec.granule.</span></span><span class="sig-name descname"><span class="pre">get_granule_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#crec.api.GovInfoClient" title="crec.api.GovInfoClient"><span class="pre">GovInfoClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">granule_class_filters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#crec.logger.Logger" title="crec.logger.Logger"><span class="pre">Logger</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#crec.granule.get_granule_ids" title="Permalink to this definition"></a></dt>
+<dd><p>A function to retrieve the granule identifiers associated with a specific day.
+Takes as an input a date string, a <a class="reference internal" href="#crec.api.GovInfoClient" title="crec.api.GovInfoClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">GovInfoClient</span></code></a> object, a list of
+granule_class_filters, and a <a class="reference internal" href="#crec.logger.Logger" title="crec.logger.Logger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Logger</span></code></a> object.</p>
+<p>This function reaches the <code class="docutils literal notranslate"><span class="pre">/granules</span></code> endpoint of the GovInfo API which returns these
+identifiers. If provided, only granules with a class listed in
+<code class="docutils literal notranslate"><span class="pre">granule_class_filter</span></code> will be retrieved. Otherwise, all granules are included.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="crec.granule.Granule">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">crec.granule.</span></span><span class="sig-name descname"><span class="pre">Granule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">granule_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crec.granule.Granule" title="Permalink to this definition"></a></dt>
+<dd><p>Represents a single GovInfo granule and its associated metadata and text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>granule_id</strong> (<em>str</em>) – The granule’s identifier</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.granule.Granule.attributes">
+<span class="sig-name descname"><span class="pre">attributes</span></span><a class="headerlink" href="#crec.granule.Granule.attributes" title="Permalink to this definition"></a></dt>
+<dd><p>A dictionary of information describing the granule. Possible keys are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">granuleId</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">searchTitle</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">granuleClass</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">subGranuleClass</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">chamber</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">granuleDate</span></code></p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.granule.Granule.xml_url">
+<span class="sig-name descname"><span class="pre">xml_url</span></span><a class="headerlink" href="#crec.granule.Granule.xml_url" title="Permalink to this definition"></a></dt>
+<dd><p>A relative URL that reaches the <code class="docutils literal notranslate"><span class="pre">/mods</span></code> endpoint of the GovInfo API to
+request the granule’s metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.granule.Granule.htm_url">
+<span class="sig-name descname"><span class="pre">htm_url</span></span><a class="headerlink" href="#crec.granule.Granule.htm_url" title="Permalink to this definition"></a></dt>
+<dd><p>A relative URL that reaches the <code class="docutils literal notranslate"><span class="pre">/htm</span></code> endpoint of the GovInfo API to
+request the granule’s text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.granule.Granule.raw_text">
+<span class="sig-name descname"><span class="pre">raw_text</span></span><a class="headerlink" href="#crec.granule.Granule.raw_text" title="Permalink to this definition"></a></dt>
+<dd><p>The text of the granule without elements like headers, page numbers,
+and times removed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.granule.Granule.clean_text">
+<span class="sig-name descname"><span class="pre">clean_text</span></span><a class="headerlink" href="#crec.granule.Granule.clean_text" title="Permalink to this definition"></a></dt>
+<dd><p>The text of the granule with elements like headers, page numbers,
+and times removed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.granule.Granule.speakers">
+<span class="sig-name descname"><span class="pre">speakers</span></span><a class="headerlink" href="#crec.granule.Granule.speakers" title="Permalink to this definition"></a></dt>
+<dd><p>A mapping between speaker identifiers and <a class="reference internal" href="#crec.speaker.Speaker" title="crec.speaker.Speaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Speaker</span></code></a> objects for all of
+the speakers on the granule, including speakers referred to by title only
+(ie. The PRESIDENT pro tempore).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[str, speaker]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.granule.Granule.valid_responses">
+<span class="sig-name descname"><span class="pre">valid_responses</span></span><a class="headerlink" href="#crec.granule.Granule.valid_responses" title="Permalink to this definition"></a></dt>
+<dd><p>A boolean that indicates whether the metadata and text requests both
+properly resolved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.granule.Granule.parsed">
+<span class="sig-name descname"><span class="pre">parsed</span></span><a class="headerlink" href="#crec.granule.Granule.parsed" title="Permalink to this definition"></a></dt>
+<dd><p>A boolean that indicates whether the text of the granule was successfully
+parsed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.granule.Granule.written">
+<span class="sig-name descname"><span class="pre">written</span></span><a class="headerlink" href="#crec.granule.Granule.written" title="Permalink to this definition"></a></dt>
+<dd><p>A boolean that indicates whether the metadata and text of the granule
+were successfully written to disk.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.granule.Granule.complete">
+<span class="sig-name descname"><span class="pre">complete</span></span><a class="headerlink" href="#crec.granule.Granule.complete" title="Permalink to this definition"></a></dt>
+<dd><p>A boolean that indicates whether the desired behavior (parsing and writing)
+was achieved. If both <code class="docutils literal notranslate"><span class="pre">parse</span></code> and <code class="docutils literal notranslate"><span class="pre">write</span></code> are <code class="docutils literal notranslate"><span class="pre">True</span></code>, then <code class="docutils literal notranslate"><span class="pre">parsed</span></code>
+and <code class="docutils literal notranslate"><span class="pre">written</span></code> must be <code class="docutils literal notranslate"><span class="pre">True</span></code> for the granule to be <code class="docutils literal notranslate"><span class="pre">complete</span></code>; if
+<code class="docutils literal notranslate"><span class="pre">parse</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code> and <code class="docutils literal notranslate"><span class="pre">write</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>, only <code class="docutils literal notranslate"><span class="pre">parsed</span></code> must be true
+for the granule to be <code class="docutils literal notranslate"><span class="pre">complete</span></code>; if <code class="docutils literal notranslate"><span class="pre">parse</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code> and <code class="docutils literal notranslate"><span class="pre">write</span></code>
+is <code class="docutils literal notranslate"><span class="pre">True</span></code>, only <code class="docutils literal notranslate"><span class="pre">written</span></code> must be true for the granule to be <code class="docutils literal notranslate"><span class="pre">complete</span></code>.
+Finally, if both <code class="docutils literal notranslate"><span class="pre">parse</span></code> and <code class="docutils literal notranslate"><span class="pre">write</span></code> are <code class="docutils literal notranslate"><span class="pre">False</span></code>, the granule is
+automatically <code class="docutils literal notranslate"><span class="pre">complete</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.granule.Granule.parse_exception">
+<span class="sig-name descname"><span class="pre">parse_exception</span></span><a class="headerlink" href="#crec.granule.Granule.parse_exception" title="Permalink to this definition"></a></dt>
+<dd><p>In the case of a parsing exception, that exception is assigned to this
+attribute.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Exception</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.granule.Granule.write_exception">
+<span class="sig-name descname"><span class="pre">write_exception</span></span><a class="headerlink" href="#crec.granule.Granule.write_exception" title="Permalink to this definition"></a></dt>
+<dd><p>In the case of a writing exception, that exception is assigned to this
+attribute.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Exception</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.granule.Granule.passages">
+<span class="sig-name descname"><span class="pre">passages</span></span><a class="headerlink" href="#crec.granule.Granule.passages" title="Permalink to this definition"></a></dt>
+<dd><p>Stores the <a class="reference internal" href="#crec.text.Passage" title="crec.text.Passage"><code class="xref py py-class docutils literal notranslate"><span class="pre">Passage</span></code></a> objects associated with this granule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#crec.text.PassageCollection" title="crec.text.PassageCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">PassageCollection</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.granule.Granule.paragraphs">
+<span class="sig-name descname"><span class="pre">paragraphs</span></span><a class="headerlink" href="#crec.granule.Granule.paragraphs" title="Permalink to this definition"></a></dt>
+<dd><p>Stores the <a class="reference internal" href="#crec.text.Paragraph" title="crec.text.Paragraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paragraph</span></code></a> objects associated with this granule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#crec.text.ParagraphCollection" title="crec.text.ParagraphCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParagraphCollection</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.granule.Granule.async_get">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">async_get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#crec.api.GovInfoClient" title="crec.api.GovInfoClient"><span class="pre">GovInfoClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">parse</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#crec.granule.Granule.async_get" title="Permalink to this definition"></a></dt>
+<dd><p>Takes as an input a <a class="reference internal" href="#crec.api.GovInfoClient" title="crec.api.GovInfoClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">GovInfoClient</span></code></a> object, and booleans indicating
+whether the granule’s data should be parsed and/or written to disk. Requests
+the granule’s metadata and text, and proceeds from there.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.granule.Granule.parse_responses">
+<span class="sig-name descname"><span class="pre">parse_responses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml_response</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Response</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">htm_response</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Response</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#crec.granule.Granule.parse_responses" title="Permalink to this definition"></a></dt>
+<dd><p>Takes both the metadata (xml) and text (htm) responses return from the
+<a class="reference internal" href="#crec.api.GovInfoClient" title="crec.api.GovInfoClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">GovInfoClient</span></code></a> object. Tries to parse both of them. In the case of an
+error, saves the error to either the <a class="reference internal" href="#crec.granule.Granule.parse_exception" title="crec.granule.Granule.parse_exception"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Granule.parse_exception</span></code></a>
+attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.granule.Granule.write_responses">
+<span class="sig-name descname"><span class="pre">write_responses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">write</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xml_response</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Response</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">htm_response</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Response</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#crec.granule.Granule.write_responses" title="Permalink to this definition"></a></dt>
+<dd><p>Takes a <code class="docutils literal notranslate"><span class="pre">write</span></code> path, and both the metadata (xml) and text (htm) responses return from the
+<a class="reference internal" href="#crec.api.GovInfoClient" title="crec.api.GovInfoClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">GovInfoClient</span></code></a> object. Tries to write both of them to disk. In the
+case of an error, saves the error to either the <a class="reference internal" href="#crec.granule.Granule.write_exception" title="crec.granule.Granule.write_exception"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Granule.write_exception</span></code></a>
+attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.granule.Granule.parse_xml">
+<span class="sig-name descname"><span class="pre">parse_xml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Element</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#crec.granule.Granule.parse_xml" title="Permalink to this definition"></a></dt>
+<dd><p>Parses the xml response. First, it updates the <a class="reference internal" href="#crec.granule.Granule.attributes" title="crec.granule.Granule.attributes"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Granule.attributes</span></code></a>
+dictionary. Then, it finds all listed Congress Members who spoke during the
+course of the granule. For each one, it instantiates a <a class="reference internal" href="#crec.speaker.Speaker" title="crec.speaker.Speaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Speaker</span></code></a>
+object, and a unique speaker identifier, and adds those to the granule’s
+mapping of speakers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.granule.Granule.parse_htm">
+<span class="sig-name descname"><span class="pre">parse_htm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_text</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#crec.granule.Granule.parse_htm" title="Permalink to this definition"></a></dt>
+<dd><p>Parses the text response. Starts by removing common non-speech elements:
+the title, the footer, page numbers, and times. Then, it calls the
+<a class="reference internal" href="#crec.granule.Granule.find_titled_speakers" title="crec.granule.Granule.find_titled_speakers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Granule.find_titled_speakers()</span></code></a> and <a class="reference internal" href="#crec.granule.Granule.find_passages" title="crec.granule.Granule.find_passages"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Granule.find_passages()</span></code></a>
+functions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.granule.Granule.find_titled_speakers">
+<span class="sig-name descname"><span class="pre">find_titled_speakers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#crec.granule.Granule.find_titled_speakers" title="Permalink to this definition"></a></dt>
+<dd><p>Searches through the cleaned text to find instances of ‘titled speakers,’ or
+a speaker who is not listed in the xml and is only referred to by title.
+Examples of this type of speaker include The PRESIDING OFFICER and
+The CHIEF JUSTICE. For each titled speaker, it creates a new <a class="reference internal" href="#crec.speaker.Speaker" title="crec.speaker.Speaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Speaker</span></code></a>
+object, and a unique speaker identifier, and adds those to the granule’s
+mapping of speakers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.granule.Granule.find_passages">
+<span class="sig-name descname"><span class="pre">find_passages</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#crec.granule.Granule.find_passages" title="Permalink to this definition"></a></dt>
+<dd><p>Splits the cleaned text into <a class="reference internal" href="#crec.text.Passage" title="crec.text.Passage"><code class="xref py py-class docutils literal notranslate"><span class="pre">Passage</span></code></a> objects. This process goes as
+follows:</p>
+<p>First, the function checks the length of the <code class="xref py py-attr docutils literal notranslate"><span class="pre">speaker</span></code> attribute. If the
+length is zero, there are no known speakers. As such, the entire cleaned text
+is assigned to a single <a class="reference internal" href="#crec.text.Passage" title="crec.text.Passage"><code class="xref py py-class docutils literal notranslate"><span class="pre">Passage</span></code></a> with an unknown speaker.</p>
+<p>If there is more than one speaker, the function continues. The idea here is to
+take advantage of the ways the Congressional Record introduces new speakers.
+For Members of Congress, the Congressional Record places their honorific
+(Mr., Ms., Dr., etc.) and their fully capitalized last name at the beginning
+of the paragraph where they begin speaking.</p>
+<p>An example may look like this:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>  Ms. TENNEY. Mr. Speaker, I rise today to recognize a new record in
+Oswego County, New York. The town of Redfield now has the record for
+the most snowfall in 48 hours. An astonishing 62 inches of snow fell in
+this idyllic town along the Salmon River with only 550 people near Lake
+Ontario.
+</pre></div>
+</div>
+<p>Or this:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>  Mr. McCONNELL. Mr. President, I ask unanimous consent that the Senate
+proceed to legislative session for a period of morning business, with
+Senators permitted to speak therein for up to 10 minutes each.
+</pre></div>
+</div>
+<p>Notice that the last name is not always fully capitalized. There are some other
+inconsistencies as well. Some examples include:</p>
+<ul class="simple">
+<li><p>Mr. RODNEY DAVIS of Illinois.</p></li>
+<li><p>Ms. ROS-LEHTINEN.</p></li>
+</ul>
+<p>Finally, titled speakers follow slightly different patterns. Examples include:</p>
+<ul class="simple">
+<li><p>The SPEAKER pro tempore.</p></li>
+<li><p>The CHIEF JUSTICE.</p></li>
+<li><p>Mr. Manager RASKIN.</p></li>
+</ul>
+<p>Thankfully, the metadata of each granule lists the “parsed name” of each
+speaking Member of Congress, or how their name will appear in the text when
+they begin speaking. These parsed names are assigned to the appropriate
+<a class="reference internal" href="#crec.speaker.Speaker" title="crec.speaker.Speaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Speaker</span></code></a> objects when <a class="reference internal" href="#crec.granule.Granule.parse_xml" title="crec.granule.Granule.parse_xml"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Granule.parse_xml()</span></code></a> is called.</p>
+<p>Similarly, the parsed names of titled speakers are found and assigned when
+<a class="reference internal" href="#crec.granule.Granule.find_titled_speakers" title="crec.granule.Granule.find_titled_speakers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Granule.find_titled_speakers()</span></code></a> is called.</p>
+<p>These parsed names are used to construct a regex search string that can
+identify new speakers at the beginning of paragraphs. The function splits the
+cleaned text up at these new-speaker-matches, and assigns each piece of text to
+a <a class="reference internal" href="#crec.text.Passage" title="crec.text.Passage"><code class="xref py py-class docutils literal notranslate"><span class="pre">Passage</span></code></a> object attributed to the corresponding speaker.</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-crec.text"></span><dl class="py class">
+<dt class="sig sig-object py" id="crec.text.Paragraph">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">crec.text.</span></span><span class="sig-name descname"><span class="pre">Paragraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">granule_attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paragraph_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">passage_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speaker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#crec.speaker.Speaker" title="crec.speaker.Speaker"><span class="pre">Speaker</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">speaking</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crec.text.Paragraph" title="Permalink to this definition"></a></dt>
+<dd><p>A class to represent a single paragraph of text from the Congressional Record.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>granule_attributes</strong> (<em>dict</em>) – A list of attributes associated with the <a class="reference internal" href="#crec.granule.Granule" title="crec.granule.Granule"><code class="xref py py-class docutils literal notranslate"><span class="pre">Granule</span></code></a> object this paragraph
+is derived from. For a list of possible keys, see <a class="reference internal" href="#crec.granule.Granule.attributes" title="crec.granule.Granule.attributes"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Granule.attributes</span></code></a>.</p></li>
+<li><p><strong>paragraph_id</strong> (<em>int</em>) – An integer indicating the index of this paragraph within the <a class="reference internal" href="#crec.text.Passage" title="crec.text.Passage"><code class="xref py py-class docutils literal notranslate"><span class="pre">Passage</span></code></a>
+it comes from. Starts from 1.</p></li>
+<li><p><strong>passage_id</strong> (<em>int</em>) – An integer indicating the index of the <a class="reference internal" href="#crec.text.Passage" title="crec.text.Passage"><code class="xref py py-class docutils literal notranslate"><span class="pre">Passage</span></code></a> object this
+paragraph comes from within the <a class="reference internal" href="#crec.granule.Granule" title="crec.granule.Granule"><code class="xref py py-class docutils literal notranslate"><span class="pre">Granule</span></code></a> it comes from. Starts from 1.</p></li>
+<li><p><strong>speaker</strong> (<a class="reference internal" href="#crec.speaker.Speaker" title="crec.speaker.Speaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Speaker</span></code></a>) – The speaker (Member of Congress or titled speaker) that this paragraph belongs
+to.</p></li>
+<li><p><strong>speaking</strong> (<em>bool</em>) – Indicates whether the speaker was speaking during this paragraph. Options other
+than speaking include notes, quotes, and assorted items entered into the record
+during a passage of speech.</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – The text of the paragraph. To eliminate extra whitespace, the text is ultimately
+split into tokens and rejoined.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="crec.text.Passage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">crec.text.</span></span><span class="sig-name descname"><span class="pre">Passage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">granule_attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">passage_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speaker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#crec.speaker.Speaker" title="crec.speaker.Speaker"><span class="pre">Speaker</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">speaking</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crec.text.Passage" title="Permalink to this definition"></a></dt>
+<dd><p>A class to represent a single paragraph of text from the Congressional Record.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>granule_attributes</strong> (<em>dict</em>) – A list of attributes associated with the <a class="reference internal" href="#crec.granule.Granule" title="crec.granule.Granule"><code class="xref py py-class docutils literal notranslate"><span class="pre">Granule</span></code></a> object this passage
+is derived from. For a list of possible keys, see <a class="reference internal" href="#crec.granule.Granule.attributes" title="crec.granule.Granule.attributes"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Granule.attributes</span></code></a>.</p></li>
+<li><p><strong>passage_id</strong> (<em>int</em>) – An integer indicating the index of this paragraph within the <a class="reference internal" href="#crec.granule.Granule" title="crec.granule.Granule"><code class="xref py py-class docutils literal notranslate"><span class="pre">Granule</span></code></a>
+it comes from. Starts from 1.</p></li>
+<li><p><strong>speaker</strong> (<a class="reference internal" href="#crec.speaker.Speaker" title="crec.speaker.Speaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Speaker</span></code></a>) – The speaker (Member of Congress or titled speaker) that this paragraph belongs
+to.</p></li>
+<li><p><strong>speaking</strong> (<em>bool</em>) – Indicates whether the speaker was speaking during this passage. For a passage,
+this is always <code class="docutils literal notranslate"><span class="pre">True</span></code> because of how the process of finding passages works.
+No new-passage-match is found unless it is the start of someone speaking.</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – The text of the paragraph. To eliminate extra whitespace, the text is ultimately
+split into tokens and rejoined.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.text.Passage.paragraph_collection">
+<span class="sig-name descname"><span class="pre">paragraph_collection</span></span><a class="headerlink" href="#crec.text.Passage.paragraph_collection" title="Permalink to this definition"></a></dt>
+<dd><p>A collection of <a class="reference internal" href="#crec.text.Paragraph" title="crec.text.Paragraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paragraph</span></code></a> objects that belong to this passage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#crec.text.ParagraphCollection" title="crec.text.ParagraphCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParagraphCollection</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.text.Passage.clean_text">
+<span class="sig-name descname"><span class="pre">clean_text</span></span><a class="headerlink" href="#crec.text.Passage.clean_text" title="Permalink to this definition"></a></dt>
+<dd><p>The concatenation of the clean text of all of the paragraphs associated with
+this paragraph, separated by newlines.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.text.Passage.split_into_paragraphs">
+<span class="sig-name descname"><span class="pre">split_into_paragraphs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crec.text.Passage.split_into_paragraphs" title="Permalink to this definition"></a></dt>
+<dd><p>Splits the passage’s text into <a class="reference internal" href="#crec.text.Paragraph" title="crec.text.Paragraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paragraph</span></code></a> objects. The Congressional
+Record generally indicates a paragraph break with a newline followed by two
+spaces, but in cases where a new paragraph is beginning where <em>no one is
+speaking</em>, such as bill being entered into the record, the text is typically
+extra indented (more spaces).</p>
+<p>This function uses that pattern and splits the passage on those two types of
+paragraph breaks. This results in a list of paragraph breaks, and checking
+which pattern matched to the break tells the function whether the given
+paragraph is spoken or not.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="crec.text.ParagraphCollection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">crec.text.</span></span><span class="sig-name descname"><span class="pre">ParagraphCollection</span></span><a class="headerlink" href="#crec.text.ParagraphCollection" title="Permalink to this definition"></a></dt>
+<dd><p>A collection of <a class="reference internal" href="#crec.text.Paragraph" title="crec.text.Paragraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paragraph</span></code></a> objects.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.text.ParagraphCollection.paragraphs">
+<span class="sig-name descname"><span class="pre">paragraphs</span></span><a class="headerlink" href="#crec.text.ParagraphCollection.paragraphs" title="Permalink to this definition"></a></dt>
+<dd><p>A list of paragraph objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="#crec.text.Paragraph" title="crec.text.Paragraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paragraph</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.text.ParagraphCollection.merge">
+<span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#crec.text.ParagraphCollection" title="crec.text.ParagraphCollection"><span class="pre">ParagraphCollection</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#crec.text.ParagraphCollection.merge" title="Permalink to this definition"></a></dt>
+<dd><p>Merges another <a class="reference internal" href="#crec.text.ParagraphCollection" title="crec.text.ParagraphCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParagraphCollection</span></code></a> with itself by concatenating
+the two <a class="reference internal" href="#crec.text.ParagraphCollection.paragraphs" title="crec.text.ParagraphCollection.paragraphs"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ParagraphCollection.paragraphs</span></code></a> lists together.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.text.ParagraphCollection.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paragraph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#crec.text.Paragraph" title="crec.text.Paragraph"><span class="pre">Paragraph</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crec.text.ParagraphCollection.add" title="Permalink to this definition"></a></dt>
+<dd><p>Adds a single <a class="reference internal" href="#crec.text.Paragraph" title="crec.text.Paragraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paragraph</span></code></a> object to
+<a class="reference internal" href="#crec.text.ParagraphCollection.paragraphs" title="crec.text.ParagraphCollection.paragraphs"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ParagraphCollection.paragraphs</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.text.ParagraphCollection.to_list">
+<span class="sig-name descname"><span class="pre">to_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_unknown_speakers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_non_speaking</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#crec.text.Paragraph" title="crec.text.Paragraph"><span class="pre">Paragraph</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#crec.text.ParagraphCollection.to_list" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a list of <a class="reference internal" href="#crec.text.Paragraph" title="crec.text.Paragraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paragraph</span></code></a> objects that meet the desired criteria.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>include_unknown_speakers</strong> (<em>bool = False</em>) – Occasionally, a <a class="reference internal" href="#crec.granule.Granule" title="crec.granule.Granule"><code class="xref py py-class docutils literal notranslate"><span class="pre">Granule</span></code></a> finds passages and paragraphs with
+no known speaker. This parameter controls whether such paragraphs should be
+kept or filtered out.</p></li>
+<li><p><strong>include_non_speaking</strong> (<em>bool = False</em>) – This parameter controls whether the output should include paragraphs that
+are not spoken, as determined by the type of match in
+<a class="reference internal" href="#crec.text.Passage.split_into_paragraphs" title="crec.text.Passage.split_into_paragraphs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Passage.split_into_paragraphs()</span></code></a>.</p></li>
+<li><p><strong>search</strong> (<em>str = None</em>) – If provided, only paragraphs whose text contain <code class="docutils literal notranslate"><span class="pre">search</span></code> (ignoring case)
+are included.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.text.ParagraphCollection.to_df">
+<span class="sig-name descname"><span class="pre">to_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_unknown_speakers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_non_speaking</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">granule_attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['granuleDate',</span> <span class="pre">'granuleId']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speaker_attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['bioGuideId']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#crec.text.ParagraphCollection.to_df" title="Permalink to this definition"></a></dt>
+<dd><p>Construct and return a <code class="xref py py-class docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> object from paragraphs that
+meet the desired criteria.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>include_unknown_speakers</strong> (<em>bool = False</em>) – Occasionally, a <a class="reference internal" href="#crec.granule.Granule" title="crec.granule.Granule"><code class="xref py py-class docutils literal notranslate"><span class="pre">Granule</span></code></a> finds passages and paragraphs with
+no known speaker. This parameter controls whether such paragraphs should be
+kept or filtered out.</p></li>
+<li><p><strong>include_non_speaking</strong> (<em>bool = False</em>) – This parameter controls whether the output should include paragraphs that
+are not spoken, as determined by the type of match in
+<a class="reference internal" href="#crec.text.Passage.split_into_paragraphs" title="crec.text.Passage.split_into_paragraphs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Passage.split_into_paragraphs()</span></code></a>.</p></li>
+<li><p><strong>granule_attributes</strong> (List[str] = [<cite>granuleId</cite>]) – Each entry in this list will be an additional column in the final
+<code class="xref py py-class docutils literal notranslate"><span class="pre">pd.DataFrame</span></code>. For a full list of options, see
+<a class="reference internal" href="#crec.granule.Granule.attributes" title="crec.granule.Granule.attributes"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Granule.attributes</span></code></a>.</p></li>
+<li><p><strong>speaker_attributes</strong> (List[str] = [<cite>bioGuideId</cite>]) – Each entry in this list will be an additional column in the final
+<code class="xref py py-class docutils literal notranslate"><span class="pre">pd.DataFrame</span></code>. For a full list of options, see
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">Speaker.attributes</span></code>.</p></li>
+<li><p><strong>search</strong> (<em>str = None</em>) – If provided, only paragraphs whose text contain <code class="docutils literal notranslate"><span class="pre">search</span></code> (ignoring case)
+are included.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="crec.text.PassageCollection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">crec.text.</span></span><span class="sig-name descname"><span class="pre">PassageCollection</span></span><a class="headerlink" href="#crec.text.PassageCollection" title="Permalink to this definition"></a></dt>
+<dd><p>A collection of <a class="reference internal" href="#crec.text.Paragraph" title="crec.text.Paragraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paragraph</span></code></a> objects.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.text.PassageCollection.passages">
+<span class="sig-name descname"><span class="pre">passages</span></span><a class="headerlink" href="#crec.text.PassageCollection.passages" title="Permalink to this definition"></a></dt>
+<dd><p>A list of passage objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="#crec.text.Passage" title="crec.text.Passage"><code class="xref py py-class docutils literal notranslate"><span class="pre">Passage</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.text.PassageCollection.paragraphs">
+<span class="sig-name descname"><span class="pre">paragraphs</span></span><a class="headerlink" href="#crec.text.PassageCollection.paragraphs" title="Permalink to this definition"></a></dt>
+<dd><p>Stores the <a class="reference internal" href="#crec.text.Paragraph" title="crec.text.Paragraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paragraph</span></code></a> objects associated with this passage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#crec.text.ParagraphCollection" title="crec.text.ParagraphCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParagraphCollection</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.text.PassageCollection.merge">
+<span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#crec.text.PassageCollection" title="crec.text.PassageCollection"><span class="pre">PassageCollection</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#crec.text.PassageCollection.merge" title="Permalink to this definition"></a></dt>
+<dd><p>Merges another <a class="reference internal" href="#crec.text.PassageCollection" title="crec.text.PassageCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">PassageCollection</span></code></a> with itself by concatenating
+the two <a class="reference internal" href="#crec.text.PassageCollection.passages" title="crec.text.PassageCollection.passages"><code class="xref py py-attr docutils literal notranslate"><span class="pre">PassageCollection.passages</span></code></a> lists together.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.text.PassageCollection.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">passage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#crec.text.Passage" title="crec.text.Passage"><span class="pre">Passage</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crec.text.PassageCollection.add" title="Permalink to this definition"></a></dt>
+<dd><p>Adds a single <a class="reference internal" href="#crec.text.Passage" title="crec.text.Passage"><code class="xref py py-class docutils literal notranslate"><span class="pre">Passage</span></code></a> object to <a class="reference internal" href="#crec.text.PassageCollection.passages" title="crec.text.PassageCollection.passages"><code class="xref py py-attr docutils literal notranslate"><span class="pre">PassageCollection.passages</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.text.PassageCollection.to_list">
+<span class="sig-name descname"><span class="pre">to_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_unknown_speakers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#crec.text.Passage" title="crec.text.Passage"><span class="pre">Passage</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#crec.text.PassageCollection.to_list" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a list of <a class="reference internal" href="#crec.text.Passage" title="crec.text.Passage"><code class="xref py py-class docutils literal notranslate"><span class="pre">Passage</span></code></a> objects that meet the desired criteria.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>include_unknown_speakers</strong> (<em>bool = False</em>) – Occasionally, a <a class="reference internal" href="#crec.granule.Granule" title="crec.granule.Granule"><code class="xref py py-class docutils literal notranslate"><span class="pre">Granule</span></code></a> finds passages and paragraphs with
+no known speaker. This parameter controls whether such paragraphs should be
+kept or filtered out.</p></li>
+<li><p><strong>search</strong> (<em>str = None</em>) – If provided, only paragraphs whose text contain <code class="docutils literal notranslate"><span class="pre">search</span></code> (ignoring case)
+are included.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.text.PassageCollection.to_df">
+<span class="sig-name descname"><span class="pre">to_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_unknown_speakers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">granule_attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['granuleId']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speaker_attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['bioGuideId']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#crec.text.PassageCollection.to_df" title="Permalink to this definition"></a></dt>
+<dd><p>Construct and return a <code class="xref py py-class docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> object from passages that
+meet the desired criteria.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>include_unknown_speakers</strong> (<em>bool = False</em>) – Occasionally, a <a class="reference internal" href="#crec.granule.Granule" title="crec.granule.Granule"><code class="xref py py-class docutils literal notranslate"><span class="pre">Granule</span></code></a> finds passages and paragraphs with
+no known speaker. This parameter controls whether such paragraphs should be
+kept or filtered out.</p></li>
+<li><p><strong>granule_attributes</strong> (List[str] = [<cite>granuleId</cite>]) – Each entry in this list will be an additional column in the final
+<code class="xref py py-class docutils literal notranslate"><span class="pre">pd.DataFrame</span></code>. For a full list of options, see
+<a class="reference internal" href="#crec.granule.Granule.attributes" title="crec.granule.Granule.attributes"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Granule.attributes</span></code></a>.</p></li>
+<li><p><strong>speaker_attributes</strong> (List[str] = [<cite>bioGuideId</cite>]) – Each entry in this list will be an additional column in the final
+<code class="xref py py-class docutils literal notranslate"><span class="pre">pd.DataFrame</span></code>. For a full list of options, see
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">Speaker.attributes</span></code>.</p></li>
+<li><p><strong>search</strong> (<em>str = None</em>) – If provided, only paragraphs whose text contain <code class="docutils literal notranslate"><span class="pre">search</span></code> (ignoring case)
+are included.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-crec.speaker"></span><dl class="py class">
+<dt class="sig sig-object py" id="crec.speaker.Speaker">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">crec.speaker.</span></span><span class="sig-name descname"><span class="pre">Speaker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crec.speaker.Speaker" title="Permalink to this definition"></a></dt>
+<dd><p>A class to represent a single speaker – either a Member of Congress or a titled
+speaker.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>attributes</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>] </em><em>= None</em>) – <p>A dictionary of attributes that describe the speaker. Possible keys are:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">authorityId</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bioGuideId</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">chamber</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">congress</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gpoId</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">party</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">role</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">state</span></code></p></li>
+</ul>
+</p></li>
+<li><p><strong>names</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>] </em><em>= None</em>) – <p>A dictionary of names the speaker goes by. Possible keys are:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">parsed</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">authority-fnf</span></code> (First Last)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">authority-lnf</span></code> (Last, First)</p></li>
+</ul>
+</p></li>
+<li><p><strong>titled</strong> (<em>bool = False</em>) – A boolean indicating whether the speaker is a titled speaker
+(President pro tempore, Chief Justice, etc.), and not a Member of Congress.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.speaker.Speaker.from_title">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_title</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#crec.speaker.Speaker" title="crec.speaker.Speaker"><span class="pre">Speaker</span></a></span></span><a class="headerlink" href="#crec.speaker.Speaker.from_title" title="Permalink to this definition"></a></dt>
+<dd><p>This classmethod instantiates a <a class="reference internal" href="#crec.speaker.Speaker" title="crec.speaker.Speaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Speaker</span></code></a> object from a title alone.
+The provided title is set to be both the parsed and first-last name of the
+speaker.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>title</strong> (<em>str</em>) – The name of the speaker.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.speaker.Speaker.from_member">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_member</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">member</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Element</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#crec.speaker.Speaker" title="crec.speaker.Speaker"><span class="pre">Speaker</span></a></span></span><a class="headerlink" href="#crec.speaker.Speaker.from_member" title="Permalink to this definition"></a></dt>
+<dd><p>This classmethod instantiates a <a class="reference internal" href="#crec.speaker.Speaker" title="crec.speaker.Speaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Speaker</span></code></a> object to represent a
+Member of Congress. The Member’s attributes and names are assigned to the
+speaker’s attributes and names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>member</strong> (<em>xml.etree.ElementTree.Element</em>) – An xml element that represents a Member of Congress.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.speaker.Speaker.get_attribute">
+<span class="sig-name descname"><span class="pre">get_attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attribute</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#crec.speaker.Speaker.get_attribute" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the requested speaker attribute if it exists; otherwise, returns
+<code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-crec.downloader"></span><dl class="py class">
+<dt class="sig sig-object py" id="crec.downloader.Downloader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">crec.downloader.</span></span><span class="sig-name descname"><span class="pre">Downloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">granule_class_filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parse</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_wait</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate_limit_wait</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#crec.logger.Logger" title="crec.logger.Logger"><span class="pre">Logger</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crec.downloader.Downloader" title="Permalink to this definition"></a></dt>
+<dd><p>Supervises and controls requests made through a <a class="reference internal" href="#crec.api.GovInfoClient" title="crec.api.GovInfoClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">GovInfoClient</span></code></a> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>granule_class_filter</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – If provided, only granules with a class listed in <code class="docutils literal notranslate"><span class="pre">granule_class_filter</span></code>
+will be retrieved. If <code class="docutils literal notranslate"><span class="pre">granule_class_filter</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, all granules
+are included.</p></li>
+<li><p><strong>parse</strong> (<em>bool = True</em>) – A boolean that indicates whether or not the text of granules should be parsed.</p></li>
+<li><p><strong>write</strong> (<em>Union</em><em>[</em><em>bool</em><em>, </em><em>str</em><em>] </em><em>= False</em>) – If <code class="docutils literal notranslate"><span class="pre">write</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>, then granule text (htm files) and metadata (xml files)
+will not be written to disk. Otherwise, <code class="docutils literal notranslate"><span class="pre">write</span></code> should be a path where those
+files should be written to.</p></li>
+<li><p><strong>batch_size</strong> (<em>int = 200</em>) – The number of granules to asynchronously attempt to get at the same time.
+Too high of a number will result in frequent rate limit issues.</p></li>
+<li><p><strong>batch_wait</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>bool</em><em>] </em><em>= 2</em>) – If <code class="docutils literal notranslate"><span class="pre">batch_wait</span></code> is an <code class="docutils literal notranslate"><span class="pre">int</span></code>, then after requesting granule data in each
+batch of size <code class="docutils literal notranslate"><span class="pre">batch_size</span></code>, the program will halt for <code class="docutils literal notranslate"><span class="pre">batch_wait</span></code> seconds.
+Otherwise, <code class="docutils literal notranslate"><span class="pre">batch_size</span></code> should be <code class="docutils literal notranslate"><span class="pre">False</span></code>, and the program will not pause
+after each batch.</p></li>
+<li><p><strong>rate_limit_wait</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>bool</em><em>] </em><em>= 300</em>) – If <code class="docutils literal notranslate"><span class="pre">rate_limit_wait</span></code> is an <code class="docutils literal notranslate"><span class="pre">int</span></code>, then exceeding the GovInfo rate limit
+will cause the program to halt for <code class="docutils literal notranslate"><span class="pre">rate_limit_wait</span></code> seconds. Otherwise,
+<code class="docutils literal notranslate"><span class="pre">rate_limit_wait</span></code> should be <code class="docutils literal notranslate"><span class="pre">False</span></code>, and exceeding the rate limit will
+throw an uncaught exception.</p></li>
+<li><p><strong>retry_limit</strong> (<em>Union</em><em>[</em><em>bool</em><em>, </em><em>int</em><em>] </em><em>= 5</em>) – If <code class="docutils literal notranslate"><span class="pre">retry_limit</span></code> is an <code class="docutils literal notranslate"><span class="pre">int</span></code>, then the program will attempt to request
+URLs up to <code class="docutils literal notranslate"><span class="pre">retry_limit</span></code> times before moving on. Otherwise, <code class="docutils literal notranslate"><span class="pre">retry_limit</span></code>
+should be <code class="docutils literal notranslate"><span class="pre">False</span></code>, and URLs will only be tried once.</p></li>
+<li><p><strong>api_key</strong> (<em>str = None</em>) – API key from GovInfo. Can be obtained by visiting
+<a class="reference external" href="https://www.govinfo.gov/api-signup">https://www.govinfo.gov/api-signup</a></p></li>
+<li><p><strong>logger</strong> (<a class="reference internal" href="#crec.logger.Logger" title="crec.logger.Logger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Logger</span></code></a>) – An object that handles outputting logs.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.downloader.Downloader.client">
+<span class="sig-name descname"><span class="pre">client</span></span><a class="headerlink" href="#crec.downloader.Downloader.client" title="Permalink to this definition"></a></dt>
+<dd><p>A <a class="reference internal" href="#crec.api.GovInfoClient" title="crec.api.GovInfoClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">GovInfoClient</span></code></a> object that is used to make requests.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#crec.api.GovInfoClient" title="crec.api.GovInfoClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">GovInfoClient</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.downloader.Downloader.incomplete_days">
+<span class="sig-name descname"><span class="pre">incomplete_days</span></span><a class="headerlink" href="#crec.downloader.Downloader.incomplete_days" title="Permalink to this definition"></a></dt>
+<dd><p>A set of date strings that did <em>not</em> have all of their associated granule
+identifiers retrieved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Set[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crec.downloader.Downloader.incomplete_granules">
+<span class="sig-name descname"><span class="pre">incomplete_granules</span></span><a class="headerlink" href="#crec.downloader.Downloader.incomplete_granules" title="Permalink to this definition"></a></dt>
+<dd><p>A set of granule identifiers that did <em>not</em> have their data retrieved,
+parsed, or written to disk (depending on requested behavior).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Set[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.downloader.Downloader.get_granules_in_batch">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_granules_in_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">granules</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#crec.granule.Granule" title="crec.granule.Granule"><span class="pre">Granule</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#crec.api.GovInfoClient" title="crec.api.GovInfoClient"><span class="pre">GovInfoClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#crec.granule.Granule" title="crec.granule.Granule"><span class="pre">Granule</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#crec.downloader.Downloader.get_granules_in_batch" title="Permalink to this definition"></a></dt>
+<dd><p>Takes as an input a list of <a class="reference internal" href="#crec.granule.Granule" title="crec.granule.Granule"><code class="xref py py-class docutils literal notranslate"><span class="pre">Granule</span></code></a> objects and a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">GovInfoClient</span></code>. Splits the granules into batches of
+size <code class="docutils literal notranslate"><span class="pre">self.batch_size</span></code>. Within each batch, a <code class="xref py py-class docutils literal notranslate"><span class="pre">asyncio.Task</span></code> is created
+which consists of getting the granule’s data, and potentially parsing and
+writing it (depending on <code class="docutils literal notranslate"><span class="pre">self.parse</span></code> and <code class="docutils literal notranslate"><span class="pre">self.write</span></code>).
+Should only be called internally.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.downloader.Downloader.get_granules_from_ids">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_granules_from_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">granule_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#crec.api.GovInfoClient" title="crec.api.GovInfoClient"><span class="pre">GovInfoClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#crec.granule.Granule" title="crec.granule.Granule"><span class="pre">Granule</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#crec.downloader.Downloader.get_granules_from_ids" title="Permalink to this definition"></a></dt>
+<dd><p>Takes as an input a list of granule identifiers and a
+<a class="reference internal" href="#crec.api.GovInfoClient" title="crec.api.GovInfoClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">GovInfoClient</span></code></a>. Initializes a <a class="reference internal" href="#crec.granule.Granule" title="crec.granule.Granule"><code class="xref py py-class docutils literal notranslate"><span class="pre">Granule</span></code></a> object for each
+identifier. Hands the initialized granules over to
+<a class="reference internal" href="#crec.downloader.Downloader.get_granules_in_batch" title="crec.downloader.Downloader.get_granules_in_batch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Downloader.get_granules_in_batch()</span></code></a>. Should only be called internally.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.downloader.Downloader.get_from_ids">
+<span class="sig-name descname"><span class="pre">get_from_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">granule_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#crec.granule.Granule" title="crec.granule.Granule"><span class="pre">Granule</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#crec.downloader.Downloader.get_from_ids" title="Permalink to this definition"></a></dt>
+<dd><p>Takes as an input a list of granule identifiers and executes the
+<a class="reference internal" href="#crec.downloader.Downloader.get_granules_from_ids" title="crec.downloader.Downloader.get_granules_from_ids"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Downloader.get_granules_from_ids()</span></code></a> coroutine.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.downloader.Downloader.get_granule_ids_from_dates">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_granule_ids_from_dates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#crec.api.GovInfoClient" title="crec.api.GovInfoClient"><span class="pre">GovInfoClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#crec.downloader.Downloader.get_granule_ids_from_dates" title="Permalink to this definition"></a></dt>
+<dd><p>Takes as an input a list of date strings and a <code class="xref py py-class docutils literal notranslate"><span class="pre">GovInfoClient</span></code>.
+Then, creates a <code class="xref py py-class docutils literal notranslate"><span class="pre">Package</span></code> object for each date. Then, calls
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">Package.get_granule_ids()</span></code> to get the granule identifiers associated
+with that given day. Also keeps track of whether all granule identifiers
+from a particular day were retrieved; if not, that day will be listed under
+<code class="docutils literal notranslate"><span class="pre">self.incomplete_days</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.downloader.Downloader.get_granules_from_dates">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_granules_from_dates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#crec.granule.Granule" title="crec.granule.Granule"><span class="pre">Granule</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#crec.downloader.Downloader.get_granules_from_dates" title="Permalink to this definition"></a></dt>
+<dd><p>Takes as an input a list of date strings. Gets the granule identifiers
+associated with those dates using
+<a class="reference internal" href="#crec.downloader.Downloader.get_granule_ids_from_dates" title="crec.downloader.Downloader.get_granule_ids_from_dates"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Downloader.get_granule_ids_from_dates()</span></code></a>, and passes those along to
+<a class="reference internal" href="#crec.downloader.Downloader.get_granules_from_ids" title="crec.downloader.Downloader.get_granules_from_ids"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Downloader.get_granules_from_ids()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.downloader.Downloader.get_from_dates">
+<span class="sig-name descname"><span class="pre">get_from_dates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#crec.granule.Granule" title="crec.granule.Granule"><span class="pre">Granule</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#crec.downloader.Downloader.get_from_dates" title="Permalink to this definition"></a></dt>
+<dd><p>Takes as an input a list of date strings and executes the
+<a class="reference internal" href="#crec.downloader.Downloader.get_granules_from_dates" title="crec.downloader.Downloader.get_granules_from_dates"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Downloader.get_granules_from_dates()</span></code></a> coroutine.</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-crec.api"></span><dl class="py exception">
+<dt class="sig sig-object py" id="crec.api.RateLimitError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">crec.api.</span></span><span class="sig-name descname"><span class="pre">RateLimitError</span></span><a class="headerlink" href="#crec.api.RateLimitError" title="Permalink to this definition"></a></dt>
+<dd><p>Thrown if the rate limit is exceeded and the Record object’s <code class="docutils literal notranslate"><span class="pre">wait</span></code>
+parameter is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="crec.api.APIKeyError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">crec.api.</span></span><span class="sig-name descname"><span class="pre">APIKeyError</span></span><a class="headerlink" href="#crec.api.APIKeyError" title="Permalink to this definition"></a></dt>
+<dd><p>Thrown if an API key is not provided or is invalid.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="crec.api.GovInfoClient">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">crec.api.</span></span><span class="sig-name descname"><span class="pre">GovInfoClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rate_limit_wait</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#crec.logger.Logger" title="crec.logger.Logger"><span class="pre">Logger</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crec.api.GovInfoClient" title="Permalink to this definition"></a></dt>
+<dd><p>Handles requesting data from the GovInfo API. Inherits from
+<code class="xref py py-class docutils literal notranslate"><span class="pre">httpx.AsyncClient</span></code> so that requests can be made asynchronously.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wait</strong> (<em>Union</em><em>[</em><em>bool</em><em>, </em><em>int</em><em>]</em>) – If <code class="docutils literal notranslate"><span class="pre">wait</span></code> is an <code class="docutils literal notranslate"><span class="pre">int</span></code>, then exceeding the GovInfo rate limit will cause the
+program to wait for <code class="docutils literal notranslate"><span class="pre">wait</span></code> seconds. Otherwise, <code class="docutils literal notranslate"><span class="pre">wait</span></code> should be <code class="docutils literal notranslate"><span class="pre">False</span></code>,
+and exceeding the rate limit will throw an uncaught exception.</p></li>
+<li><p><strong>retry_limit</strong> (<em>Union</em><em>[</em><em>bool</em><em>, </em><em>int</em><em>]</em>) – If <code class="docutils literal notranslate"><span class="pre">retry_limit</span></code> is an <code class="docutils literal notranslate"><span class="pre">int</span></code>, then the program will attempt to request
+URLs up to <code class="docutils literal notranslate"><span class="pre">retry_limit</span></code> times before moving on. Otherwise, <code class="docutils literal notranslate"><span class="pre">retry_limit</span></code>
+should be <code class="docutils literal notranslate"><span class="pre">False</span></code>, and URLs will only be tried once.</p></li>
+<li><p><strong>logger</strong> (<a class="reference internal" href="#crec.logger.Logger" title="crec.logger.Logger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Logger</span></code></a>) – An object that handles outputting logs.</p></li>
+<li><p><strong>api_key</strong> (<em>str = None</em>) – API key from GovInfo. Can be obtained by visiting
+<a class="reference external" href="https://www.govinfo.gov/api-signup">https://www.govinfo.gov/api-signup</a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.api.GovInfoClient.get">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Response</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#crec.api.GovInfoClient.get" title="Permalink to this definition"></a></dt>
+<dd><p>Extends <code class="xref py py-meth docutils literal notranslate"><span class="pre">httpx.AsyncClient.get()</span></code>. Controls waiting and retrying URLs,
+and handles GovInfo-specific query parameters like the <code class="docutils literal notranslate"><span class="pre">api_key</span></code>.
+Returns a tuple consisting of a boolean indicating whether or not the request
+was successful and the response itself (the response could be <code class="docutils literal notranslate"><span class="pre">None</span></code>
+if the request fails <code class="docutils literal notranslate"><span class="pre">self.retry_limit</span></code> times).</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-crec.logger"></span><dl class="py class">
+<dt class="sig sig-object py" id="crec.logger.DuplicateFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">crec.logger.</span></span><span class="sig-name descname"><span class="pre">DuplicateFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rate_limit_wait</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crec.logger.DuplicateFilter" title="Permalink to this definition"></a></dt>
+<dd><p>A custom class that inherits from <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Filter</span></code> to filter out duplicate
+rate limit logs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rate_limit_wait</strong> (<em>Union</em><em>[</em><em>bool</em><em>, </em><em>int</em><em>]</em>) – Determines how long the filter should wait before outputting another rate limit
+error message.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.logger.DuplicateFilter.filter">
+<span class="sig-name descname"><span class="pre">filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crec.logger.DuplicateFilter.filter" title="Permalink to this definition"></a></dt>
+<dd><p>Determines whether or not to output the current record. First, this function
+checks to see whether the last two messages in a row were both rate limit
+exceptions. Then, it checks whether less than <code class="docutils literal notranslate"><span class="pre">rate_limit_wait</span></code> time has
+passed. If all conditions are <code class="docutils literal notranslate"><span class="pre">True</span></code> then the record is skipped.
+Otherwise, the record is outputted.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="crec.logger.Logger">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">crec.logger.</span></span><span class="sig-name descname"><span class="pre">Logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rate_limit_wait</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_outpath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crec.logger.Logger" title="Permalink to this definition"></a></dt>
+<dd><p>A custom logger to handle the logging of status updates. Maintains a logging queue
+so that logs which are sent during an asynchronous event loop are non-blocking.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rate_limit_wait</strong> (<em>Union</em><em>[</em><em>bool</em><em>, </em><em>int</em><em>]</em>) – Determines how long the logger should wait before outputting another rate limit
+error message.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – A boolean that determines whether or not logs are outputted at all
+TODO: should rename this to just logging or something</p></li>
+<li><p><strong>logger_outpath</strong> (<em>str</em>) – If provided, a <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.FileHandler</span></code> object is created and logs are
+sent to <code class="docutils literal notranslate"><span class="pre">logger_outpath</span></code> in addition to being written to stdout.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="crec.logger.Logger.log">
+<span class="sig-name descname"><span class="pre">log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#crec.logger.Logger.log" title="Permalink to this definition"></a></dt>
+<dd><p>Outputs a log depending on the <code class="xref py py-attr docutils literal notranslate"><span class="pre">Logger.verbose</span></code> attribute.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>message</strong> (<em>str</em>) – The message to be logged.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="getting_started.html" class="btn btn-neutral float-left" title="Getting started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Ethan Singer, Spencer Torene, Berk Ekmekci.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

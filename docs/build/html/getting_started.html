@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Getting started &mdash; crec  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API documentation" href="api.html" />
+    <link rel="prev" title="Welcome to crec!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            crec
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tutorial">Tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#getting-data">Getting data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#analyzing-data">Analyzing data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">crec</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Getting started</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/getting_started.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="getting-started">
+<h1>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h1>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
+</section>
+<section id="tutorial">
+<h2>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this heading"></a></h2>
+<p>Before reading on, it may be helpful to check out the <a class="reference external" href="https://api.govinfo.gov/docs/">GovInfo API</a> itself.</p>
+<section id="getting-data">
+<h3>Getting data<a class="headerlink" href="#getting-data" title="Permalink to this heading"></a></h3>
+<p>To fetch data using <strong>crec</strong>, start by creating a <a class="reference internal" href="api.html#crec.record.Record" title="crec.record.Record"><code class="xref py py-class docutils literal notranslate"><span class="pre">Record</span></code></a> object. There are three ways to do so.</p>
+<ol class="arabic simple">
+<li><p>By providing a <code class="docutils literal notranslate"><span class="pre">start_date</span></code> and an <code class="docutils literal notranslate"><span class="pre">end_date</span></code>.</p></li>
+</ol>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">Record</span><span class="p">(</span><span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2019-01-03&quot;</span><span class="p">,</span> <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2021-01-03&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>By providing a list of <code class="docutils literal notranslate"><span class="pre">dates</span></code>.</p></li>
+</ol>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">Record</span><span class="p">(</span><span class="n">dates</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;2019-01-03&quot;</span><span class="p">,</span> <span class="s2">&quot;2020-01-03&quot;</span><span class="p">,</span> <span class="s2">&quot;2021-01-03&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>By providing a list of <code class="docutils literal notranslate"><span class="pre">granule_ids</span></code>. Granule identifiers can be obtained and filtered by using GovInfo’s <a class="reference external" href="https://www.govinfo.gov/help/searching">Advanced Search</a> functionality.</p></li>
+</ol>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">Record</span><span class="p">(</span><span class="n">dates</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;2019-01-03&quot;</span><span class="p">,</span> <span class="s2">&quot;2020-01-03&quot;</span><span class="p">,</span> <span class="s2">&quot;2021-01-03&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>There are a number of additional parameters you can provide when creating a record. You can restrict the record to an individual chamber. If you’re not interested in parsing the text data, you can choose to write the text and xml files that come from the GovInfo API to disk instead. There are a number of parameters that control how quickly data should be requested, and what to do in the case an error occurs. Finally, you can control how <strong>crec</strong> will produce and output logs. For a full overview of these parameters, check out <a class="reference internal" href="api.html#crec.record.Record" title="crec.record.Record"><code class="xref py py-class docutils literal notranslate"><span class="pre">Record</span></code></a> in the API documentation.</p>
+</section>
+<section id="analyzing-data">
+<h3>Analyzing data<a class="headerlink" href="#analyzing-data" title="Permalink to this heading"></a></h3>
+<p>To interact with data retrieved by the <a class="reference internal" href="api.html#crec.record.Record" title="crec.record.Record"><code class="xref py py-class docutils literal notranslate"><span class="pre">Record</span></code></a>, you’ll mostly interact with the <code class="xref py py-attr docutils literal notranslate"><span class="pre">Record.text_collection</span></code> attribute, which holds all of the parsed, cleaned, and annotated passages and paragraphs in the text. To read more about these, check out the <a class="reference internal" href="api.html#crec.text.Passage" title="crec.text.Passage"><code class="xref py py-class docutils literal notranslate"><span class="pre">Passage</span></code></a> and <a class="reference internal" href="api.html#crec.text.Paragraph" title="crec.text.Paragraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paragraph</span></code></a> sections of the API documentation.</p>
+<p>To view these elements in the format of a <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>, simply call</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text_collection</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This will, by default, return a DataFrame of consisting of data from the <a class="reference internal" href="api.html#crec.text.Passage" title="crec.text.Passage"><code class="xref py py-class docutils literal notranslate"><span class="pre">Passage</span></code></a> objects associated with the record. If you’d rather look at paragraphs, change the call to</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text_collection</span><span class="o">.</span><span class="n">to_df</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="s2">&quot;paragraph&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>By default, the resulting DataFrame will have the following columns: <code class="docutils literal notranslate"><span class="pre">granuleId</span></code>, <code class="docutils literal notranslate"><span class="pre">text</span></code>, <code class="docutils literal notranslate"><span class="pre">speaker</span></code>, <code class="docutils literal notranslate"><span class="pre">bioGuideId</span></code>. You can choose to add additional parameters describing both the granule (eg. <code class="docutils literal notranslate"><span class="pre">searchTitle</span></code> and <code class="docutils literal notranslate"><span class="pre">granuleClass</span></code>) and the speaker (eg. <code class="docutils literal notranslate"><span class="pre">party</span></code> and <code class="docutils literal notranslate"><span class="pre">state</span></code>) associated with each text element. Constructing a DataFrame with all available parameters would look like this.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text_collection</span><span class="o">.</span><span class="n">to_df</span><span class="p">(</span>
+<span class="go">    granule_attributes = [&#39;searchTitle&#39;, &#39;granuleClass&#39;, &#39;subGranuleClass&#39;, &#39;chamber&#39;, &#39;granuleDate&#39;],</span>
+<span class="go">    speaker_attributes = [&#39;authorityId&#39;, &#39;bioGuideId&#39;, &#39;chamber&#39;, &#39;congress&#39;, &#39;gpoId&#39;, &#39;party&#39;, &#39;role&#39;, &#39;state&#39;]</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+<p>You can use any and all <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> attributes and methods to analyze the record’s data.</p>
+<p>For example, to see which Senators use the word “education” the most, you could do something like this:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text_collection</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;bioGuideId&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">group</span> <span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;education&quot;</span><span class="p">)]))</span>
+</pre></div>
+</div>
+<p>If you want to interact with the <a class="reference internal" href="api.html#crec.text.Passage" title="crec.text.Passage"><code class="xref py py-class docutils literal notranslate"><span class="pre">Passage</span></code></a> or <a class="reference internal" href="api.html#crec.text.Paragraph" title="crec.text.Paragraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Paragraph</span></code></a> objects themselves, you can use the following instead</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text_collection</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Feel free to play around!</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to crec!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral float-right" title="API documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Ethan Singer, Spencer Torene, Berk Ekmekci.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
