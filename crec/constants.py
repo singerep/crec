@@ -1,6 +1,10 @@
 TITLES = [
     'The PRESIDING OFFICER(?: \([^)]*\))?',
+    'The SPEAKER pro tempore(?: \([^)]*\))?(?: \(during the vote\))?',
+    'The SPEAKER pro tempore(?: \(during the vote\))?',
+    'The SPEAKER pro tempore(?: \([^)]*\))?',
     'The SPEAKER pro tempore',
+    'The SPEAKER(?: \(during the vote\))',
     'The SPEAKER(?: \([^)]*\))?',
     'The CHAIR(?: \([^)]*\))?',
     'The Acting CHAIR(?: \([^)]*\))?',
@@ -14,7 +18,7 @@ TITLES = [
 ]
 
 GRANULE_CLASSES = ['HOUSE', 'SENATE', 'EXTENSIONS', 'DAILYDIGEST']
-GRANULE_ATTRIBUTES = ['searchTitle', 'granuleClass', 'subGranuleClass', 'chamber', 'granuleDate']
+GRANULE_ATTRIBUTES = ['granuleDate',  'granuleId', 'searchTitle', 'granuleClass', 'subGranuleClass', 'chamber']
 SPEAKER_ATTRIBUTES = ['authorityId', 'bioGuideId', 'chamber', 'congress', 'gpoId', 'party', 'role', 'state']
 
 ATTRIBUTES = {

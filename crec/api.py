@@ -1,6 +1,7 @@
 import httpx
 from typing import Union, Tuple
 import asyncio
+import time
 
 from crec.logger import Logger
 
@@ -42,14 +43,18 @@ class GovInfoClient(httpx.AsyncClient):
         https://www.govinfo.gov/api-signup
     """
     def __init__(self, rate_limit_wait: Union[bool, int], retry_limit: Union[bool, int], logger: Logger, api_key: str):
-        super().__init__(base_url='https://api.govinfo.gov/')
+        timeout = httpx.Timeout(30.0, connect=30.0)
+        super().__init__(timeout=timeout)
+
+        self.api_root = 'https://api.govinfo.gov/'
+        self.non_api_root = 'https://www.govinfo.gov/'
 
         self.api_key = api_key
         self.rate_limit_wait = rate_limit_wait
         self.retry_limit = retry_limit
         self.logger = logger
     
-    async def get(self, url: str, params: dict = {}) -> Tuple[bool, Union[httpx.Response, None]]:
+    async def get(self, url: str, params: dict = {}, use_api: bool = True) -> Tuple[bool, Union[httpx.Response, None]]:
         """
         Extends :meth:`httpx.AsyncClient.get()`. Controls waiting and retrying URLs, 
         and handles GovInfo-specific query parameters like the ``api_key``. 
@@ -57,14 +62,19 @@ class GovInfoClient(httpx.AsyncClient):
         was successful and the response itself (the response could be ``None`` 
         if the request fails ``self.retry_limit`` times).
         """
-        params.update({'api_key': self.api_key})
+        if use_api:
+            url = self.api_root + url
+            params.update({'api_key': self.api_key})
+        else:
+            url = self.non_api_root + url
+
         request_counter = 0
         response_validity = False
         while self.retry_limit is False or request_counter < self.retry_limit:
             request_counter += 1
             try:
                 response = await super().get(url=url, params=params)
-            except (httpx.ConnectTimeout, httpx.ConnectError, httpx.ReadTimeout, httpx.PoolTimeout):
+            except (httpx.ConnectTimeout, httpx.ConnectError, httpx.ReadTimeout, httpx.ReadError, httpx.PoolTimeout, httpx.RemoteProtocolError) as e:
                 response = None
 
             if response is None:
@@ -72,8 +82,18 @@ class GovInfoClient(httpx.AsyncClient):
                 await asyncio.sleep(2)
                 continue
 
+            if (response.status_code == 400 and 'does not exist' in response.text) or response.status_code == 302:
+                response_validity = False
+                response = None
+                break
+
             if response.status_code == 401:
                 raise APIKeyError('api_key is invalid or not provided')
+
+            if response.status_code == 503:
+                self.logger.log(message=f'the content you requested is not cached by GovInfo; it is currently being generated, pausing 30 seconds')
+                await asyncio.sleep(30)
+                continue
 
             if 'OVER_RATE_LIMIT' in response.text:
                 if type(self.rate_limit_wait) == int:
@@ -84,7 +104,7 @@ class GovInfoClient(httpx.AsyncClient):
                     raise RateLimitError('you have exceeded the rate limit; halting now')
 
             if response.status_code != 200:
-                self.logger.log(message=f'api error; trying again')
+                self.logger.log(message=f'api error (status {response.status_code}); trying again')
                 await asyncio.sleep(2)
                 continue
 

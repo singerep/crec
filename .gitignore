@@ -1,1 +1,3 @@
 data/*.csv
+crec.egg-info
+.env

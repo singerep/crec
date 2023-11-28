@@ -37,6 +37,7 @@ class Speaker:
         self.titled = titled
 
         self.parsed_name = self.names.get('parsed', None)
+        self.re_search = self.parsed_name.replace('(', '\(').replace(')', '\)')
         self.first_last = self.names.get('authority-fnf', None)
 
     @classmethod

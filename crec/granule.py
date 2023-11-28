@@ -70,12 +70,12 @@ class Granule:
     attributes : dict
         A dictionary of information describing the granule. Possible keys are:
 
+        * ``granuleDate``
         * ``granuleId``
         * ``searchTitle``
         * ``granuleClass``
         * ``subGranuleClass``
         * ``chamber``
-        * ``granuleDate``
     
     xml_url : str
         A relative URL that reaches the ``/mods`` endpoint of the GovInfo API to
@@ -123,6 +123,7 @@ class Granule:
         Stores the :class:`.Paragraph` objects associated with this granule.
     """
     def __init__(self, granule_id: str) -> None:
+        self.id = granule_id
         self.attributes = {}
         self.attributes['granuleId'] = granule_id
         self.xml_url = f'packages/CREC-{granule_id[5:15]}/granules/{granule_id}/mods'
@@ -143,7 +144,7 @@ class Granule:
         self.write_exception = None
 
     def __repr__(self) -> str:
-        raise NotImplementedError
+        return f'Granule (id: {self.id})'
 
     async def async_get(self, client: GovInfoClient, parse: bool, write: Union[bool, str]) -> None:
         """
@@ -174,7 +175,7 @@ class Granule:
         else:
             self.complete = True
             
-    def parse_responses(self, xml_response: httpx.Response, htm_response: httpx.Response) -> None:
+    def parse_responses(self, xml_response: Union[httpx.Response, Element], htm_response: Union[httpx.Response, str]) -> None:
         """
         Takes both the metadata (xml) and text (htm) responses return from the
         :class:`.GovInfoClient` object. Tries to parse both of them. In the case of an
@@ -182,18 +183,24 @@ class Granule:
         attribute.
         """
         try:
-            xml_content = xml_response.content
-            root = et.fromstring(xml_content)
+            if isinstance(xml_response, httpx.Response):
+                xml_content = xml_response.content
+                root = et.fromstring(xml_content)
+            else:
+                root = xml_response
             self.parse_xml(root)
 
-            raw_text = htm_response.text
+            if isinstance(htm_response, httpx.Response):
+                raw_text = htm_response.text
+            else:
+                raw_text = htm_response
             self.parse_htm(raw_text)
 
             self.parsed = True
         except Exception as e:
             self.parse_exception = e
 
-    def write_responses(self, write: str, xml_response: httpx.Response, htm_response: httpx.Response) -> None:
+    def write_responses(self, write: str, xml_response: Union[httpx.Response, Element], htm_response: Union[httpx.Response, str]) -> None:
         """
         Takes a ``write`` path, and both the metadata (xml) and text (htm) responses return from the
         :class:`.GovInfoClient` object. Tries to write both of them to disk. In the 
@@ -210,11 +217,21 @@ class Granule:
                 xml_path = f'{write}/{granule_id}.xml'
                 htm_path = f'{write}/{granule_id}.htm'
 
+            if isinstance(xml_response, httpx.Response):
+                xml_text = xml_response.text
+            else:
+                xml_text = et.tostring(xml_response, encoding='unicode')
+
+            if isinstance(htm_response, httpx.Response):
+                htm_text = htm_response.text
+            else:
+                htm_text = htm_response
+
             with open(xml_path, 'w') as xml_file:
-                xml_file.write(xml_response.text)
+                xml_file.write(xml_text)
 
             with open(htm_path, 'w') as htm_file:
-                htm_file.write(htm_response.text)
+                htm_file.write(htm_text)
 
             self.written = True
         except Exception as e:
@@ -228,15 +245,19 @@ class Granule:
         object, and a unique speaker identifier, and adds those to the granule's
         mapping of speakers.
         """
+
         for attr in GRANULE_ATTRIBUTES:
             for e in root.iter('{http://www.loc.gov/mods/v3}' + attr):
                 self.attributes[attr] = e.text
         
         for member in root.iter('{http://www.loc.gov/mods/v3}congMember'):
             role = member.attrib.get('role', None)
-            if role is not None and role == 'SPEAKING':
+            has_parsed = any([name.attrib.get('type', None) == 'parsed' for name in member.findall('{http://www.loc.gov/mods/v3}name')])
+            if role is not None and role == 'SPEAKING' and has_parsed is True:
                 s = Speaker.from_member(member=member)
                 self.speakers[f's{len(self.speakers)}'] = s
+            if role is not None and role != 'SPEAKING' and 'VOTING' not in role and 'VOTED' not in role:
+                print(role)
 
     def parse_htm(self, raw_text) -> None:
         """
@@ -252,7 +273,7 @@ class Granule:
         text = re.sub(r'<bullet>', ' ', text)
 
         # remove title block
-        title_block_match = re.search(r'\n\n( |  )(?!\s)', text)
+        title_block_match = re.search(r'(?<!\s)\n\n(  )(?!\s)', text)
         if title_block_match is not None:
             text = '\n  ' + text[title_block_match.end():]
 
@@ -261,19 +282,25 @@ class Granule:
         if footer_match is not None:
             text = text[:footer_match.start()]
 
+        # remove inline page numbers
+        text = re.sub('\n\n\[\[Page .+\]\n\n(?=[a-zA-Z0-9])', ' ', text)
+
+        # remove other page numbers
+        text = re.sub('\[\[Page .+\]\]', '', text)
+
+        # remove times
+        text = re.sub('\{time\}\s+\d+', '', text)
+
+        # remove notes
+        text = re.sub('\n+ =+ NOTE =+(.|\n)+ END NOTE =+', '\n  ', text)
+
         # remove bottom html
         bottom_html_match = re.search('\n+<\/pre><\/body>\n<\/html>', text)
         if bottom_html_match is not None:
             text = text[:bottom_html_match.start() + 1]
 
-        # remove page numbers
-        text = re.sub('\s+\[\[Page .+\](\s+|)', ' ', text)
-
-        # remove times
-        text = re.sub('\s+\{time\}\s+\d+(\s+|)', ' ', text)
-
-        # remove notes
-        text = re.sub('\n+ =+ NOTE =+(.|\n)+ END NOTE =+', '', text)
+        spoken_paragraphs = re.finditer('((?<=(\n  ))|(?<=(\n   )))(?P<text>[^\s\(\[][\s\S]*?)(?=(\n  )|(\Z))', text)
+        text = '\n\n'.join([p.group('text') for p in spoken_paragraphs])
 
         self.clean_text = text
 
@@ -355,28 +382,32 @@ class Granule:
         cleaned text up at these new-speaker-matches, and assigns each piece of text to
         a :class:`.Passage` object attributed to the corresponding speaker.
         """
-        passage_id = 0
+        passage_id = 1
         if len(self.speakers) == 0:
             s = UNKNOWN_SPEAKER
-            passage_id += 1
             passage = Passage(granule_attributes=self.attributes, passage_id=passage_id, speaker=s, text=self.clean_text)
             self._passage_collection.add(passage=passage)
-
         else:
             sorted_speakers = sorted(self.speakers.items(), key=lambda p : len(p[1].parsed_name), reverse=True)
-            speaker_search_str = '(' + '|'.join([f'(?P<{s_id}>\n  {s.parsed_name}\. )' for s_id, s in sorted_speakers]) + ')'
+            speaker_search_str = '(' + '|'.join([f'(?P<{s_id}>{s.re_search}(\.| led the Pledge of Allegiance as follows:| \(for [\s\S]+\):)( |))' for s_id, s in sorted_speakers]) + ')'
             new_speaker_matches = list(re.finditer(speaker_search_str, self.clean_text))
 
             if len(new_speaker_matches) == 0 or new_speaker_matches[0].start() > 3:
-                if len(self.speakers) == 1:
-                    s = list(self.speakers.values())[0]
+                if re.match('(^SA \d+\.)|(^S. \d+\.)', self.clean_text):
+                    if len(new_speaker_matches) == 0:
+                        return
+                    else:
+                        pass
                 else:
-                    s = UNKNOWN_SPEAKER
-                end = None if len(new_speaker_matches) == 0 else new_speaker_matches[0].start()
+                    if len(self.speakers) == 1:
+                        s = list(self.speakers.values())[0]
+                    else:
+                        s = UNKNOWN_SPEAKER
+                    end = None if len(new_speaker_matches) == 0 else new_speaker_matches[0].start()
 
-                passage_id += 1
-                passage = Passage(granule_attributes=self.attributes, passage_id=passage_id, speaker=s, text=self.clean_text[0:end])
-                self._passage_collection.add(passage=passage)
+                    passage = Passage(granule_attributes=self.attributes, passage_id=passage_id, speaker=s, text=self.clean_text[0:end])
+                    passage_id += 1
+                    self._passage_collection.add(passage=passage)
 
             for i, match in enumerate(new_speaker_matches):
                 s_id = [k for k, v in match.groupdict().items() if v != None][0]
@@ -384,8 +415,8 @@ class Granule:
                 start = match.end()
                 end = new_speaker_matches[i + 1].start() if i < len(new_speaker_matches) - 1 else None
 
-                passage_id += 1
                 passage = Passage(granule_attributes=self.attributes, passage_id=passage_id, speaker=speaker, text=self.clean_text[start:end])
+                passage_id += 1
                 self._passage_collection.add(passage=passage)
 
     @property

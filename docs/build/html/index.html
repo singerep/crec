@@ -72,19 +72,27 @@
              
   <section id="welcome-to-crec">
 <h1>Welcome to crec!<a class="headerlink" href="#welcome-to-crec" title="Permalink to this heading"></a></h1>
-<p><strong>crec</strong> is a python tool that facilitates scraping, parsing, and processing text from the Congressional Record, the official record of the proceedings of the United States Congress. <strong>crec</strong> wraps the GovInfo API — a product of the U.S. Government Publishing Office — with an intuitive and powerful API of its own.</p>
-<p>With <strong>crec</strong>, generating a pandas DataFrame of speech data from the 116th Senate, for example, can be done in just a few lines of code.</p>
+<p><strong>crec</strong> is a python tool built for retrieving, structuring, and enriching the Congressional Record, the official record of the proceedings of the United States Congress. <strong>crec</strong> wraps the GovInfo API — a product of the U.S. Government Publishing Office — with an intuitive and powerful API of its own.</p>
+<p>With <strong>crec</strong>, generating a pandas DataFrame of speech data from the 116th Senate, for example, can be done in just a few lines of code:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">crec</span> <span class="kn">import</span> <span class="n">Record</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">Record</span><span class="p">(</span><span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2019-01-03&quot;</span><span class="p">,</span> <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2021-01-03&quot;</span><span class="p">,</span> <span class="n">granule_class_filter</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SENATE&quot;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text_collection</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span>
-<span class="go">                           granuleId                         text                speaker  bioGuideId</span>
-<span class="go">0          CREC-2019-01-04-pt1-PgS33  Under the previous order...  The PRESIDING OFFICER        None</span>
-<span class="go">1        CREC-2019-01-04-pt1-PgS32-4     Mr. President, as we ...     Charles E. Schumer     S000148</span>
-<span class="go">2        CREC-2019-01-04-pt1-PgS32-3     The Democratic leader...  The PRESIDING OFFICER        None</span>
-<span class="go">                                 ...                          ...                    ...         ...</span>
-<span class="go">29471  CREC-2021-01-01-pt1-PgS7995-6  Under the previous order...  The PRESIDING OFFICER        None</span>
-<span class="go">29472  CREC-2021-01-01-pt1-PgS7995-5   Mr. President, I move t...        Mitch McConnell     M000355</span>
-<span class="go">29473  CREC-2021-01-01-pt1-PgS7995-5  The clerk will report th...  The PRESIDING OFFICER        None</span>
+<span class="go">INFO:2023-11-13 21:50:14: getting granules with the following classes: [&#39;HOUSE&#39;, &#39;SENATE&#39;, &#39;EXTENSIONS&#39;, &#39;DAILYDIGEST&#39;]; skipping granules with the following classes: []</span>
+<span class="go">INFO:2023-11-13 21:50:14: getting granules in zipped files in batch 1 of 1</span>
+<span class="go">INFO:2023-11-13 21:50:25: successfully got zipped files for 1 of 1 valid dates; there were 0 failures</span>
+<span class="go">INFO:2023-11-13 21:50:25: successfully got and parsed 103 of 103 granules; there were 0 failures</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">passages</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span>
+<span class="go">       granuleDate                      granuleId  passage_id                                               text                speaker bioGuideId</span>
+<span class="go">0       2019-01-04    CREC-2019-01-04-pt1-PgE11-2           1  Madam Speaker, I rise today to honor Pastor Ke...            Zoe Lofgren    L000397</span>
+<span class="go">1       2019-01-04    CREC-2019-01-04-pt1-PgE11-3           1  Madam Speaker, I was not present for Roll Call...      Robert J. Wittman    W000804</span>
+<span class="go">2       2019-01-04    CREC-2019-01-04-pt1-PgE11-4           1  Madam Speaker, today is former Congressman Les...       Thomas R. Suozzi    S001201</span>
+<span class="go">3       2019-01-04    CREC-2019-01-04-pt1-PgE11-6           1  Madam Speaker, I regret I was unable to vote d...          Lloyd Smucker    S001199</span>
+<span class="go">4       2019-01-04    CREC-2019-01-04-pt1-PgE11-7           1  Madam Speaker, I was unavoidably detained due ...             Fred Upton    U000031</span>
+<span class="go">..             ...                            ...         ...                                                ...                    ...        ...</span>
+<span class="go">320061  2021-01-01    CREC-2021-01-01-pt1-PgS8016           1  Mr. President, I ask unanimous consent that th...           John Boozman    B001236</span>
+<span class="go">320062  2021-01-01    CREC-2021-01-01-pt1-PgS8016           2               Without objection, it is so ordered.  The PRESIDING OFFICER       None</span>
+<span class="go">320063  2021-01-01  CREC-2021-01-01-pt1-PgS8016-2           1  Mr. President, I ask unanimous consent that wh...           John Boozman    B001236</span>
+<span class="go">320064  2021-01-01  CREC-2021-01-01-pt1-PgS8016-2           2               Without objection, it is so ordered.  The PRESIDING OFFICER       None</span>
+<span class="go">320065  2021-01-01  CREC-2021-01-01-pt1-PgS8016-3           1  If there is no further business to come before...           John Boozman    B001236</span>
 </pre></div>
 </div>
 <p>For an brief introduction to <strong>crec</strong>, check out our <a class="reference internal" href="getting_started.html"><span class="doc">getting started guide</span></a>. For an in depth overview of the package, check out the <a class="reference internal" href="api.html"><span class="doc">API documentation</span></a>.</p>

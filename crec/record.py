@@ -52,6 +52,9 @@ class Record:
     granule_ids : List[str] = None
         A list of official granule identifiers to be used instead of
         ``start_date`` and ``end_date`` or ``dates``.
+    read_directory : str = None
+        A directory to read in XML and HTML files from. There should be one XML file
+        and one HTML file per granule in this directory.
     granule_class_filter : List[str] = None
         If provided, only granules with a class listed in ``granule_class_filter``
         will be retrieved. If ``granule_class_filter`` is ``None``, all granules
@@ -61,6 +64,7 @@ class Record:
         * ``SENATE``
         * ``EXTENSIONS``
         * ``DAILYDIGEST``
+    
     parse : bool = True
         A boolean that indicates whether or not the text of granules should be parsed.
         See :meth:`.Granule.parse_htm()` for more information.
@@ -68,14 +72,22 @@ class Record:
         If ``write`` is ``False``, then granule text (htm files) and metadata (xml files)
         will not be written to disk. Otherwise, ``write`` should be a path where those
         files should be written to.
-    batch_size: int = 200
-        The number of granules to asynchronously attempt to get at the same time.
-        Too high of a number will result in frequent rate limit issues.
-    batch_wait : Union[int, bool] = 2
+    zipped : bool = True
+        Determines if granules should be requested individually or in zips. Only applies
+        to calls where dates are used; if you are requesting individual granule
+        identifiers, granules are always requested individually.
+    batch_size: int = 3
+        The number of request to asynchronously send at the same time. Too high of a 
+        number will result in frequent rate limit issues. When requesting zip files,
+        this number should be low. When requesting files individually, this should be
+        much higher. To avoid rate limiting, try around 200.
+    batch_wait : Union[int, bool] = False
         If ``batch_wait`` is an ``int``, then after requesting granule data in each
         batch of size ``batch_size``, the program will halt for ``batch_wait`` seconds.
         Otherwise, ``batch_size`` should be ``False``, and the program will not pause
-        after each batch.
+        after each batch. When requesting zip files, a ``batch_wait`` is not necessary.
+        When requesting files individually, the ``batch_wait`` should be around 2-5
+        seconds.
     rate_limit_wait : Union[int, bool] = 300
         If ``rate_limit_wait`` is an ``int``, then exceeding the GovInfo rate limit 
         will cause the program to halt for ``rate_limit_wait`` seconds. Otherwise, 
@@ -102,17 +114,20 @@ class Record:
     paragraphs : :class:`.ParagraphCollection`
         Stores the :class:`.Paragraph` objects associated with the retrieved granules.
     """
+    # TODO add repr
     def __init__(
         self, 
         start_date: Union[str, datetime.datetime] = None, 
         end_date: Union[str, datetime.datetime] = None, 
         dates: List[Union[str, datetime.datetime]] = None, 
         granule_ids: List[str] = None,
+        read_directory : str = None,
         granule_class_filter: List[str] = None,
         parse: bool = True,
         write: Union[bool, str] = False,
-        batch_size: int = 50,
-        batch_wait: Union[int, bool] = 5,
+        zipped: bool = True,
+        batch_size: int = 3,
+        batch_wait: Union[int, bool] = False,
         rate_limit_wait: Union[int, bool] = 30,
         retry_limit: Union[bool, int] = 5,
         api_key: str = None,
@@ -121,7 +136,7 @@ class Record:
         write_path: str = None
     ) -> None:
         self.logger = Logger(rate_limit_wait=rate_limit_wait, print_logs=print_logs, write_logs=write_logs, write_path=write_path)
-        self.downloader = Downloader(granule_class_filter=granule_class_filter, parse=parse, write=write, batch_size=batch_size, batch_wait=batch_wait, rate_limit_wait=rate_limit_wait, retry_limit=retry_limit, api_key=api_key, logger=self.logger)
+        self.downloader = Downloader(granule_class_filter=granule_class_filter, parse=parse, write=write, zipped=zipped, batch_size=batch_size, batch_wait=batch_wait, rate_limit_wait=rate_limit_wait, retry_limit=retry_limit, api_key=api_key, logger=self.logger)
 
         if start_date is not None or end_date is not None or dates is not None:
             if start_date is not None and end_date is not None and dates is None:
@@ -140,13 +155,19 @@ class Record:
         elif granule_ids is not None:
             self.granules = self.downloader.get_from_ids(granule_ids=granule_ids)
 
+        elif read_directory is not None:
+            self.granules = self.downloader.get_from_directory(directory=read_directory)
+
         else:
-            raise ValueError("Must specify a start date and an end date or a list of dates or a list of granule ids")
+            raise ValueError("Must specify a start date and an end date or a list of dates or a list of granule ids or a path to a directory")
 
         self._passage_collection = PassageCollection()
 
-        for g in self.granules:
-            self._passage_collection.merge(g.passages)
+        if self.granules is not None:
+            for g in self.granules:
+                self._passage_collection.merge(g.passages)
+
+        self.logger.listener.stop()
 
     @property
     def incomplete_days(self) -> Set[str]:
