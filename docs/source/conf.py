@@ -10,7 +10,7 @@ import os
 sys.path.insert(0, os.path.abspath('../..'))
 
 project = 'crec'
-copyright = '2023, Ethan Singer, Spencer Torene, Berk Ekmekci, TRSS LLC'
+copyright = '2022-2023 Ethan Singer, Thomson Reuters Special Services LLC'
 author = 'Ethan Singer, Spencer Torene, Berk Ekmekci'
 
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage', 'sphinx.ext.napoleon', 'sphinx.ext.autosectionlabel', 'sphinx.ext.linkcode', "sphinxext.opengraph"]

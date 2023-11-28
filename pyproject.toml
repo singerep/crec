@@ -26,4 +26,5 @@ dependencies = {file = ["requirements.txt"]}
 
 [project.urls]
 "Homepage" = "https://github.com/singerep/crec"
+"Documentation" = "https://crec.readthedocs.io/en/latest/"
 "Issues" = "https://github.com/singerep/crec/issues"
